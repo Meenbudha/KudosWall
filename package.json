@@ -1,0 +1,15 @@
+{
+  "name": "internal-peer-kudos-wall",
+  "version": "1.0.0",
+  "description": "Internal Team Feedback & Peer Kudos Wall (Bonusly / Matter Alternative)",
+  "private": true,
+  "scripts": {
+    "start:server": "npm --prefix server start",
+    "start:client": "npm --prefix client dev",
+    "dev:server": "npm --prefix server dev",
+    "dev:client": "npm --prefix client dev",
+    "dev": "npm --prefix server start & npm --prefix client dev",
+    "seed": "npm --prefix server run seed",
+    "test": "npm --prefix server test"
+  }
+}
