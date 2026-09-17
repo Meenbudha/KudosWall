@@ -77,37 +77,49 @@ export const KudosCard = ({ kudos, onUserClick }) => {
     }
   };
 
-  // Optimistic emoji reaction toggle with floating emoji burst
+  // Optimistic emoji reaction toggle with floating emoji burst (1 active reaction per user)
   const handleReactionClick = async (e, emoji) => {
     if (!user) {
       openAuthModal('login');
       return;
     }
 
-    // Trigger visual floating particle burst & audio pop
-    spawnEmojiBurst(e, emoji);
+    const userId = user.id || user._id;
+
+    // Check if user currently has this emoji or another active on this kudos
+    let activeEmoji = null;
+    for (const group of reactions) {
+      if (group.users?.some((u) => (u._id || u).toString() === userId.toString())) {
+        activeEmoji = group.emoji;
+        break;
+      }
+    }
+
+    const isTogglingOff = activeEmoji === emoji;
+
+    // Trigger visual floating particle burst right above the emoji pill if reacting
+    if (!isTogglingOff) {
+      spawnEmojiBurst(e, emoji);
+    }
 
     if (isReacting) return;
     setIsReacting(true);
 
-    const userId = user.id || user._id;
-
-    // Optimistic UI state update
+    // Optimistic UI state update: remove user from all groups first
     const previousReactions = JSON.parse(JSON.stringify(reactions));
-    const nextReactions = [...reactions];
+    const nextReactions = reactions.map((r) => ({
+      ...r,
+      users: r.users.filter((u) => (u._id || u).toString() !== userId.toString())
+    }));
 
-    let group = nextReactions.find((r) => r.emoji === emoji);
-    if (!group) {
-      group = { emoji, users: [] };
-      nextReactions.push(group);
-    }
-
-    const hasReacted = group.users.some((u) => (u._id || u).toString() === userId.toString());
-
-    if (hasReacted) {
-      group.users = group.users.filter((u) => (u._id || u).toString() !== userId.toString());
-    } else {
-      group.users.push(userId);
+    // If not toggling off, add user to target emoji group
+    if (!isTogglingOff) {
+      let targetGroup = nextReactions.find((r) => r.emoji === emoji);
+      if (!targetGroup) {
+        targetGroup = { emoji, users: [] };
+        nextReactions.push(targetGroup);
+      }
+      targetGroup.users.push(userId);
     }
 
     setReactions(nextReactions);
@@ -166,7 +178,7 @@ export const KudosCard = ({ kudos, onUserClick }) => {
               src={kudos.sender?.avatar || 'https://api.dicebear.com/7.x/bottts/svg?seed=Sender'}
               alt={kudos.sender?.name}
               className="coss-avatar coss-avatar-sm"
-              style={{ border: '2px solid rgba(255, 255, 255, 0.25)' }}
+              style={{ border: '2px solid var(--border-medium)' }}
             />
             <div>
               <span style={{ fontWeight: 800, fontSize: '0.92rem', color: 'var(--text-primary)' }}>

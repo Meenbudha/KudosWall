@@ -116,13 +116,12 @@ export const LeaderboardView = ({ onUserClick }) => {
                 className={`coss-badge ${isSelected ? 'coss-badge-indigo' : 'coss-badge-outline'}`}
                 style={{
                   cursor: 'pointer',
-                  border: isSelected ? '1px solid var(--accent-primary)' : '1px solid var(--border-subtle)',
-                  background: isSelected ? 'rgba(99, 102, 241, 0.28)' : 'transparent',
-                  color: isSelected ? '#fff' : 'var(--text-secondary)',
+                  border: isSelected ? '1px solid var(--accent-primary)' : '1px solid var(--border-medium)',
+                  fontWeight: isSelected ? 800 : 600,
                   padding: '0.4rem 0.85rem',
                   fontSize: '0.78rem',
                   flexShrink: 0,
-                  boxShadow: isSelected ? '0 0 12px rgba(99, 102, 241, 0.3)' : 'none'
+                  boxShadow: isSelected ? '0 0 12px rgba(99, 102, 241, 0.25)' : 'none'
                 }}
               >
                 {dept}
@@ -179,7 +178,7 @@ export const LeaderboardView = ({ onUserClick }) => {
                   justifyContent: 'center',
                   fontWeight: 900,
                   fontSize: '1.75rem',
-                  color: '#cbd5e1',
+                  color: 'var(--text-secondary)',
                   boxShadow: 'inset 0 10px 15px -3px rgba(255, 255, 255, 0.1)'
                 }}>
                   #2

@@ -235,22 +235,28 @@ const toggleReaction = async (req, res, next) => {
       });
     }
 
-    // Find reaction slot or create it
-    let reactionGroup = kudos.reactions.find(r => r.emoji === emoji);
-    if (!reactionGroup) {
-      kudos.reactions.push({ emoji, users: [] });
-      reactionGroup = kudos.reactions[kudos.reactions.length - 1];
-    }
+    // Single emoji reaction per user per Kudos:
+    // Remove user from any previously reacted emoji group on this post
+    let previouslyReactedEmoji = null;
+    kudos.reactions.forEach(group => {
+      const idx = group.users.findIndex(u => (u._id || u).toString() === userId);
+      if (idx > -1) {
+        previouslyReactedEmoji = group.emoji;
+        group.users.splice(idx, 1);
+      }
+    });
 
-    const userIndex = reactionGroup.users.findIndex(u => u.toString() === userId);
     let action;
-
-    if (userIndex > -1) {
-      // Toggle off
-      reactionGroup.users.splice(userIndex, 1);
+    if (previouslyReactedEmoji === emoji) {
+      // User clicked the exact same emoji -> toggle off / unreact
       action = 'removed';
     } else {
-      // Toggle on
+      // User reacted with a new emoji -> add to the selected emoji group
+      let reactionGroup = kudos.reactions.find(r => r.emoji === emoji);
+      if (!reactionGroup) {
+        kudos.reactions.push({ emoji, users: [] });
+        reactionGroup = kudos.reactions[kudos.reactions.length - 1];
+      }
       reactionGroup.users.push(req.user._id);
       action = 'added';
     }

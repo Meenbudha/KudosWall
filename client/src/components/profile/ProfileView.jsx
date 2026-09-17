@@ -10,13 +10,15 @@ import {
   Clock, 
   ArrowLeft,
   CheckCircle2,
-  Calendar
+  Calendar,
+  Camera
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { userService } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import { KudosCard } from '../feed/KudosCard';
 import { soundEffects } from '../../utils/effects';
+import { AvatarCustomizerModal } from './AvatarCustomizerModal';
 
 const BADGE_CATALOG = [
   { id: 'first_kudos', name: 'Culture Starter', icon: '🌱', description: 'Sent your very first peer kudos!' },
@@ -33,6 +35,7 @@ export const ProfileView = ({ userId, onBack, onOpenGiveKudos }) => {
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeHistoryTab, setActiveHistoryTab] = useState('received'); // 'received' | 'sent'
+  const [avatarModalOpen, setAvatarModalOpen] = useState(false);
 
   useEffect(() => {
     if (targetId) {
@@ -108,13 +111,55 @@ export const ProfileView = ({ userId, onBack, onOpenGiveKudos }) => {
           flexWrap: 'wrap',
           gap: '1.5rem'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.75rem' }}>
-            <img
-              src={user.avatar}
-              alt={user.name}
-              className="coss-avatar coss-avatar-xl"
-              style={{ border: '4px solid var(--accent-primary)', boxShadow: '0 0 25px rgba(99, 102, 241, 0.5)' }}
-            />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.75rem', flexWrap: 'wrap' }}>
+            <div style={{ position: 'relative', display: 'inline-block' }}>
+              <img
+                src={user.avatar}
+                alt={user.name}
+                className="coss-avatar coss-avatar-xl"
+                style={{
+                  border: '4px solid var(--accent-primary)',
+                  boxShadow: '0 0 25px rgba(99, 102, 241, 0.5)',
+                  cursor: (currentUser && (currentUser.id || currentUser._id) === user._id) ? 'pointer' : 'default',
+                  transition: 'transform var(--transition-fast)'
+                }}
+                onClick={() => {
+                  if (currentUser && (currentUser.id || currentUser._id) === user._id) {
+                    setAvatarModalOpen(true);
+                  }
+                }}
+                title={currentUser && (currentUser.id || currentUser._id) === user._id ? 'Click to change avatar' : user.name}
+              />
+              {currentUser && (currentUser.id || currentUser._id) === user._id && (
+                <button
+                  type="button"
+                  onClick={() => setAvatarModalOpen(true)}
+                  style={{
+                    position: 'absolute',
+                    bottom: 2,
+                    right: 2,
+                    background: 'var(--accent-primary)',
+                    color: '#ffffff',
+                    border: '3px solid var(--bg-surface)',
+                    borderRadius: '50%',
+                    width: 34,
+                    height: 34,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    boxShadow: '0 3px 10px rgba(0,0,0,0.35)',
+                    transition: 'transform var(--transition-fast)'
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.15)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+                  title="Change profile picture"
+                >
+                  <Camera size={16} />
+                </button>
+              )}
+            </div>
+
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <h1 style={{ fontSize: '1.75rem', color: 'var(--text-primary)' }}>{user.name}</h1>
@@ -127,6 +172,17 @@ export const ProfileView = ({ userId, onBack, onOpenGiveKudos }) => {
                 <Calendar size={14} color="var(--accent-primary)" />
                 <span>Internal Kudos Network Member</span>
               </div>
+              {currentUser && (currentUser.id || currentUser._id) === user._id && (
+                <button
+                  type="button"
+                  onClick={() => setAvatarModalOpen(true)}
+                  className="coss-btn coss-btn-secondary coss-btn-sm"
+                  style={{ marginTop: '0.85rem' }}
+                >
+                  <Camera size={14} color="var(--accent-primary)" />
+                  <span>Customize Avatar / Upload Photo</span>
+                </button>
+              )}
             </div>
           </div>
 
@@ -233,7 +289,7 @@ export const ProfileView = ({ userId, onBack, onOpenGiveKudos }) => {
                 key={b.id}
                 onClick={() => handleBadgeClick(isUnlocked, b.name)}
                 style={{
-                  background: isUnlocked ? 'var(--bg-surface-elevated)' : 'rgba(255, 255, 255, 0.02)',
+                  background: isUnlocked ? 'var(--bg-surface-elevated)' : 'var(--bg-surface)',
                   border: `1px solid ${isUnlocked ? 'var(--accent-primary)' : 'var(--border-subtle)'}`,
                   borderRadius: 'var(--radius-md)',
                   padding: '1.15rem',
@@ -319,6 +375,21 @@ export const ProfileView = ({ userId, onBack, onOpenGiveKudos }) => {
           </div>
         )}
       </div>
+
+      {/* Avatar Customizer & PC Photo Upload Modal */}
+      {currentUser && (currentUser.id || currentUser._id) === user._id && (
+        <AvatarCustomizerModal
+          isOpen={avatarModalOpen}
+          onClose={() => setAvatarModalOpen(false)}
+          currentAvatar={user.avatar}
+          onAvatarSaved={(newAvatar) => {
+            setProfileData((prev) => ({
+              ...prev,
+              user: { ...prev.user, avatar: newAvatar }
+            }));
+          }}
+        />
+      )}
     </div>
   );
 };

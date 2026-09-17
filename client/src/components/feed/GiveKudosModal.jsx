@@ -380,9 +380,8 @@ export const GiveKudosModal = ({ isOpen, onClose, onKudosCreated }) => {
                       fontSize: '0.84rem',
                       cursor: 'pointer',
                       border: isSelected ? '1px solid var(--accent-primary)' : '1px solid var(--border-medium)',
-                      background: isSelected ? 'rgba(99, 102, 241, 0.3)' : 'transparent',
-                      color: isSelected ? '#fff' : 'var(--text-secondary)',
-                      boxShadow: isSelected ? '0 0 14px rgba(99, 102, 241, 0.4)' : 'none'
+                      fontWeight: isSelected ? 800 : 600,
+                      boxShadow: isSelected ? '0 0 14px rgba(99, 102, 241, 0.3)' : 'none'
                     }}
                     title={cv.description}
                   >

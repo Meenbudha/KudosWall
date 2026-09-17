@@ -7,7 +7,6 @@ import {
   LogOut, 
   User as UserIcon, 
   Mail, 
-  BookOpen, 
   TrendingUp, 
   LayoutGrid, 
   BarChart3,
@@ -17,7 +16,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
-export const Navbar = ({ activeTab, setActiveTab, onOpenGiveKudos, onOpenInbox, onOpenDocs }) => {
+export const Navbar = ({ activeTab, setActiveTab, onOpenGiveKudos, onOpenInbox }) => {
   const { user, logout, openAuthModal } = useAuth();
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [theme, setTheme] = useState(localStorage.getItem('kudos_theme') || 'dark');
@@ -125,15 +124,6 @@ export const Navbar = ({ activeTab, setActiveTab, onOpenGiveKudos, onOpenInbox, 
           >
             <Mail size={15} color="var(--accent-cyan)" />
             <span style={{ fontSize: '0.75rem' }}>Inbox</span>
-          </button>
-
-          <button 
-            onClick={onOpenDocs}
-            className="coss-btn coss-btn-secondary coss-btn-sm" 
-            title="Interactive API Documentation"
-          >
-            <BookOpen size={15} color="var(--accent-pink)" />
-            <span style={{ fontSize: '0.75rem' }}>API Docs</span>
           </button>
 
           {user ? (

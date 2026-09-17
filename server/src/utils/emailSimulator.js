@@ -22,7 +22,7 @@ class EmailSimulator {
       token,
       actionUrl: verifyUrl,
       sentAt: new Date().toISOString(),
-      message: `Hi ${name}, please verify your email by clicking the link or using the token: ${token}`
+      message: `Hi ${name}, please verify your email to activate your KudosWall account using the token below.`
     };
 
     this.simulatedEmails.unshift(mailItem);
@@ -51,7 +51,7 @@ class EmailSimulator {
       token,
       actionUrl: resetUrl,
       sentAt: new Date().toISOString(),
-      message: `Hi ${name}, you requested a password reset. Use this token: ${token} or click: ${resetUrl}`
+      message: `Hi ${name}, you requested a password reset. Use the token below to set your new password.`
     };
 
     this.simulatedEmails.unshift(mailItem);

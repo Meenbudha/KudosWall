@@ -52,6 +52,20 @@
 
   --transition-fast: 0.16s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-normal: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Badge Theming (Dark Mode Defaults) */
+  --badge-indigo-text: #818cf8;
+  --badge-indigo-bg: rgba(99, 102, 241, 0.2);
+  --badge-emerald-text: #34d399;
+  --badge-emerald-bg: rgba(16, 185, 129, 0.2);
+  --badge-amber-text: #fbbf24;
+  --badge-amber-bg: rgba(245, 158, 11, 0.2);
+  --badge-violet-text: #c084fc;
+  --badge-violet-bg: rgba(168, 85, 247, 0.2);
+  --badge-rose-text: #fb7185;
+  --badge-rose-bg: rgba(244, 63, 94, 0.2);
+  --badge-cyan-text: #38bdf8;
+  --badge-cyan-bg: rgba(6, 182, 212, 0.2);
 }
 
 /* Crisp Daylight Theme (Perfect High Contrast & Readability) */
@@ -64,21 +78,35 @@
   --bg-surface: #ffffff;
   --bg-surface-elevated: #f1f5f9;
   --bg-surface-hover: #e2e8f0;
-  --bg-glass: rgba(255, 255, 255, 0.92);
+  --bg-glass: rgba(255, 255, 255, 0.94);
 
-  --border-subtle: rgba(15, 23, 42, 0.09);
+  --border-subtle: rgba(15, 23, 42, 0.08);
   --border-medium: rgba(15, 23, 42, 0.16);
-  --border-accent: rgba(99, 102, 241, 0.35);
+  --border-accent: rgba(99, 102, 241, 0.45);
 
   --text-primary: #0f172a;         /* High-contrast dark charcoal */
   --text-secondary: #334155;       /* Crisp slate */
   --text-muted: #64748b;           /* Readable muted slate */
 
   --gradient-card-glow: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.02) 100%);
-  --shadow-sm: 0 2px 6px rgba(15, 23, 42, 0.05);
-  --shadow-md: 0 10px 25px -3px rgba(15, 23, 42, 0.07), 0 4px 6px -4px rgba(15, 23, 42, 0.03);
-  --shadow-lg: 0 20px 35px -4px rgba(15, 23, 42, 0.1), 0 8px 16px -4px rgba(15, 23, 42, 0.05);
+  --shadow-sm: 0 2px 6px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 10px 25px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 20px 35px -4px rgba(15, 23, 42, 0.12), 0 8px 16px -4px rgba(15, 23, 42, 0.06);
   --shadow-glow: 0 0 25px rgba(99, 102, 241, 0.15);
+
+  /* Badge Theming (Light Mode High-Contrast) */
+  --badge-indigo-text: #3730a3;      /* Deep rich indigo */
+  --badge-indigo-bg: rgba(99, 102, 241, 0.12);
+  --badge-emerald-text: #065f46;     /* Deep rich emerald */
+  --badge-emerald-bg: rgba(16, 185, 129, 0.12);
+  --badge-amber-text: #92400e;       /* Deep rich amber */
+  --badge-amber-bg: rgba(245, 158, 11, 0.14);
+  --badge-violet-text: #581c87;      /* Deep rich violet */
+  --badge-violet-bg: rgba(168, 85, 247, 0.12);
+  --badge-rose-text: #9f1239;        /* Deep rich rose */
+  --badge-rose-bg: rgba(244, 63, 94, 0.12);
+  --badge-cyan-text: #0e7490;        /* Deep rich cyan */
+  --badge-cyan-bg: rgba(6, 182, 212, 0.12);
 }
 
 *, *::before, *::after {
@@ -107,6 +135,16 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   letter-spacing: -0.025em;
   color: var(--text-primary);
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  background: var(--bg-surface-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  padding: 0.15rem 0.4rem;
+  font-size: 0.85em;
 }
 
 /* Custom Scrollbar */
@@ -262,39 +300,51 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .coss-badge-indigo {
-  background: rgba(99, 102, 241, 0.16);
-  border-color: rgba(99, 102, 241, 0.35);
-  color: #6366f1;
+  background: var(--badge-indigo-bg);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: var(--badge-indigo-text);
 }
 
 .coss-badge-emerald {
-  background: rgba(16, 185, 129, 0.16);
-  border-color: rgba(16, 185, 129, 0.35);
-  color: #059669;
+  background: var(--badge-emerald-bg);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: var(--badge-emerald-text);
 }
 
 .coss-badge-amber {
-  background: rgba(245, 158, 11, 0.16);
-  border-color: rgba(245, 158, 11, 0.35);
-  color: #d97706;
+  background: var(--badge-amber-bg);
+  border-color: rgba(245, 158, 11, 0.4);
+  color: var(--badge-amber-text);
 }
 
 .coss-badge-violet {
-  background: rgba(168, 85, 247, 0.16);
-  border-color: rgba(168, 85, 247, 0.35);
-  color: #9333ea;
+  background: var(--badge-violet-bg);
+  border-color: rgba(168, 85, 247, 0.4);
+  color: var(--badge-violet-text);
 }
 
 .coss-badge-rose {
-  background: rgba(244, 63, 94, 0.16);
-  border-color: rgba(244, 63, 94, 0.35);
-  color: #e11d48;
+  background: var(--badge-rose-bg);
+  border-color: rgba(244, 63, 94, 0.4);
+  color: var(--badge-rose-text);
 }
 
 .coss-badge-cyan {
-  background: rgba(6, 182, 212, 0.16);
-  border-color: rgba(6, 182, 212, 0.35);
-  color: #0891b2;
+  background: var(--badge-cyan-bg);
+  border-color: rgba(6, 182, 212, 0.4);
+  color: var(--badge-cyan-text);
+}
+
+.coss-badge-outline {
+  background: var(--bg-surface-elevated);
+  border-color: var(--border-medium);
+  color: var(--text-secondary);
+}
+
+.coss-badge-outline:hover {
+  background: var(--bg-surface-hover);
+  color: var(--text-primary);
+  border-color: var(--border-accent);
 }
 
 /* Points Badge Glowing Animation */
@@ -442,6 +492,8 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
   animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   color: var(--text-primary);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .coss-dialog-header {
@@ -502,27 +554,30 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 12px rgba(99, 102, 241, 0.25);
 }
 
-/* Floating Emoji Burst Animation */
+/* Floating Emoji Burst Animation - floats gently right above the emoji pill */
 .floating-emoji {
-  position: absolute;
+  position: fixed;
   pointer-events: none;
-  font-size: 1.4rem;
-  animation: floatUpAndFade 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  z-index: 50;
+  font-size: 1.3rem;
+  line-height: 1;
+  animation: floatUpAndFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  z-index: 9999;
+  transform: translate(-50%, 0);
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25));
 }
 
 @keyframes floatUpAndFade {
   0% {
     opacity: 1;
-    transform: translateY(0) scale(0.6) rotate(0deg);
+    transform: translate(-50%, 0) scale(0.8) rotate(0deg);
   }
   50% {
-    opacity: 0.9;
-    transform: translateY(-30px) scale(1.3) rotate(15deg);
+    opacity: 0.95;
+    transform: translate(-50%, -14px) scale(1.18) rotate(8deg);
   }
   100% {
     opacity: 0;
-    transform: translateY(-60px) scale(1) rotate(-10deg);
+    transform: translate(-50%, -26px) scale(0.95) rotate(-6deg);
   }
 }
 

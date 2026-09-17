@@ -57,7 +57,7 @@ export const ApiDocsModal = ({ isOpen, onClose }) => {
             padding: '1rem',
             marginBottom: '1.5rem'
           }}>
-            <div style={{ fontWeight: 700, fontSize: '0.875rem', color: '#a5b4fc', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+            <div style={{ fontWeight: 700, fontSize: '0.875rem', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
               <Key size={15} /> Pair-Token Auth & Cookie Specifications:
             </div>
             <ul style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', marginTop: '0.5rem', paddingLeft: '1.2rem', lineHeight: 1.6 }}>

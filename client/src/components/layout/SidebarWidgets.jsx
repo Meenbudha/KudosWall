@@ -79,8 +79,9 @@ export const SidebarWidgets = ({ onOpenGiveKudos, onUserClick, setActiveTab }) =
             </div>
 
             <div style={{
-              height: 7,
-              background: 'rgba(255, 255, 255, 0.08)',
+              height: 8,
+              background: 'var(--bg-surface-elevated)',
+              border: '1px solid var(--border-subtle)',
               borderRadius: 'var(--radius-full)',
               overflow: 'hidden'
             }}>

@@ -29,10 +29,11 @@ export const spawnEmojiBurst = (e, emoji = '✨') => {
     el.className = 'floating-emoji';
     el.innerText = emoji;
 
-    // Randomize initial burst position
-    const offsetX = (Math.random() - 0.5) * 40;
+    // Center horizontally over the pill with subtle random offset
+    const offsetX = (Math.random() - 0.5) * 16;
     const left = rect.left + rect.width / 2 + offsetX;
-    const top = rect.top - 10;
+    // Position immediately above the top edge of the pill
+    const top = rect.top - 6;
 
     el.style.left = `${left}px`;
     el.style.top = `${top}px`;
@@ -41,6 +42,6 @@ export const spawnEmojiBurst = (e, emoji = '✨') => {
 
     setTimeout(() => {
       el.remove();
-    }, 850);
+    }, 700);
   }
 };

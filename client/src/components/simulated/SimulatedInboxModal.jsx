@@ -93,9 +93,12 @@ export const SimulatedInboxModal = ({ isOpen, onClose }) => {
                   key={mail.id}
                   style={{
                     background: 'var(--bg-surface-elevated)',
-                    border: '1px solid var(--border-subtle)',
+                    border: '1px solid var(--border-medium)',
                     borderRadius: 'var(--radius-md)',
-                    padding: '1rem'
+                    padding: '1.15rem',
+                    overflowWrap: 'anywhere',
+                    wordBreak: 'break-word',
+                    overflow: 'hidden'
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -103,7 +106,7 @@ export const SimulatedInboxModal = ({ isOpen, onClose }) => {
                       <span className={`coss-badge ${mail.type === 'VERIFICATION' ? 'coss-badge-emerald' : 'coss-badge-amber'}`} style={{ marginBottom: '0.35rem' }}>
                         {mail.type}
                       </span>
-                      <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-primary)' }}>
+                      <div style={{ fontWeight: 700, fontSize: '0.92rem', color: 'var(--text-primary)' }}>
                         {mail.subject}
                       </div>
                       <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
@@ -112,22 +115,42 @@ export const SimulatedInboxModal = ({ isOpen, onClose }) => {
                     </div>
                   </div>
 
-                  <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', marginTop: '0.6rem' }}>
+                  <p style={{
+                    fontSize: '0.84rem',
+                    color: 'var(--text-secondary)',
+                    marginTop: '0.65rem',
+                    lineHeight: 1.6,
+                    overflowWrap: 'anywhere',
+                    wordBreak: 'break-word'
+                  }}>
                     {mail.message}
                   </p>
 
                   <div style={{
-                    marginTop: '0.75rem',
-                    padding: '0.5rem 0.75rem',
-                    background: 'rgba(0,0,0,0.3)',
+                    marginTop: '0.85rem',
+                    padding: '0.65rem 0.85rem',
+                    background: 'var(--bg-surface)',
+                    border: '1px solid var(--border-medium)',
                     borderRadius: 'var(--radius-sm)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    gap: '0.5rem'
+                    gap: '0.75rem',
+                    flexWrap: 'wrap'
                   }}>
-                    <code style={{ fontSize: '0.75rem', color: '#a5b4fc', wordBreak: 'break-all' }}>
-                      Token: {mail.token}
+                    <code style={{
+                      fontSize: '0.78rem',
+                      color: 'var(--text-primary)',
+                      wordBreak: 'break-all',
+                      overflowWrap: 'anywhere',
+                      fontWeight: 600,
+                      background: 'transparent',
+                      border: 'none',
+                      padding: 0,
+                      flex: '1 1 240px',
+                      maxWidth: '100%'
+                    }}>
+                      <span style={{ color: 'var(--accent-primary)', fontWeight: 700 }}>Token: </span>{mail.token}
                     </code>
                     <button
                       type="button"

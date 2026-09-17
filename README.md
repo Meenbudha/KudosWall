@@ -174,29 +174,103 @@ Open your browser at: **`http://localhost:5173`**
 
 ---
 
-## 6. Interactive API Documentation
+## 6. Complete REST API Specifications & Reference
 
-You can view the interactive API documentation directly within the running web app by clicking the **"API Docs"** button in the top navigation bar, or via `http://localhost:5000/api/docs`.
+The backend API follows RESTful conventions and uses JSON payloads. It features secure **Pair-Token authentication** (`httpOnly` cookies with Bearer token fallback) and atomic MongoDB transaction safety.
 
-### Primary Endpoints Summary
+### A. Authentication & Security Architecture
 
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| `POST` | `/api/auth/signup` | Create user and trigger simulated email verification | No |
-| `POST` | `/api/auth/verify-email` | Validate token and set pair auth cookies | No |
-| `POST` | `/api/auth/login` | Log in and receive 15m access + 7d refresh token cookies | No |
-| `POST` | `/api/auth/refresh` | Rotate tokens and reissue fresh cookie pair | Cookie |
-| `POST` | `/api/auth/logout` | Clear auth cookies and revoke refresh token in DB | Cookie |
-| `GET`  | `/api/auth/me` | Fetch authenticated user details and balance | Cookie |
-| `GET`  | `/api/auth/simulated-inbox`| View simulated verification & reset emails | No |
-| `POST` | `/api/kudos` | Send peer kudos (atomic deduction & credit) | Cookie |
-| `GET`  | `/api/kudos` | Retrieve paginated social feed with filters | Optional |
-| `POST` | `/api/kudos/:id/react` | Toggle emoji reaction (+1, 👏, 🔥, ❤️, 🚀) | Cookie |
-| `GET`  | `/api/analytics/leaderboard`| Aggregation pipeline ranking top peers of month | Optional |
-| `GET`  | `/api/analytics/summary` | Distribution of company values and department metrics | Optional |
-| `POST` | `/api/analytics/reset-monthly-allowance` | Reset all users' giving allowance to 100 pts | Cookie |
-| `GET`  | `/api/users` | User autocomplete directory | Optional |
-| `GET`  | `/api/users/:id/profile`| User profile with badges & received/sent history | Optional |
+```
+Client Request ──► [cookieParser / Bearer Header] ──► [authMiddleware (protect)]
+  ├─ 15-Minute Access Token: Verified with JWT_ACCESS_SECRET
+  └─ 7-Day Refresh Token: Stored in httpOnly cookie with token rotation on /api/auth/refresh
+```
+
+- **Base URL:** `http://localhost:5000/api`
+- **Authentication:** Dual-mode:
+  1. `httpOnly` secure cookies (automatic with browser `credentials: include`).
+  2. `Authorization: Bearer <access_token>` header (for cURL / Postman testing).
+
+---
+
+### B. Endpoints Directory & Schema Details
+
+#### 1. Authentication Endpoints (`/api/auth`)
+
+| Method | Endpoint | Description | Auth | Request Body / Query Params |
+|---|---|---|---|---|
+| `POST` | `/api/auth/signup` | Register new account and generate simulated verification email | Public | `{ "name": "...", "email": "...", "password": "...", "department": "Engineering" }` |
+| `POST` | `/api/auth/verify-email` | Verify account via token and issue pair cookies | Public | `{ "token": "...", "email": "..." }` |
+| `POST` | `/api/auth/login` | Authenticate with credentials, sets 15m + 7d cookies | Public | `{ "email": "...", "password": "..." }` |
+| `POST` | `/api/auth/refresh` | Rotate tokens; revokes old refresh token and re-issues fresh pair | Cookie / Header | None (uses `refreshToken` cookie) |
+| `POST` | `/api/auth/logout` | Invalidate refresh token in database and clear cookies | Protected | None |
+| `GET`  | `/api/auth/me` | Retrieve authenticated user profile and wallet balances | Protected | None |
+| `POST` | `/api/auth/forgot-password` | Generate simulated 1-hour cryptographic password reset link | Public | `{ "email": "..." }` |
+| `POST` | `/api/auth/reset-password` | Reset password using cryptographic token | Public | `{ "token": "...", "newPassword": "..." }` |
+| `GET`  | `/api/auth/simulated-inbox` | Inspect simulated outgoing emails & verification tokens | Public | None |
+
+#### 2. Peer Kudos & Recognition Endpoints (`/api/kudos`)
+
+| Method | Endpoint | Description | Auth | Request Body / Query Params |
+|---|---|---|---|---|
+| `POST` | `/api/kudos` | Send kudos with atomic point deduction & audit logging | Protected | `{ "receiverId": "...", "points": 20, "message": "...", "companyValue": "Innovation" }` |
+| `GET`  | `/api/kudos` | Fetch paginated recognition stream | Optional | Query: `?page=1&limit=10&department=Engineering&value=Innovation&search=query` |
+| `GET`  | `/api/kudos/:id` | Fetch a single kudos item with sender/receiver details | Optional | Param: `id` |
+| `POST` | `/api/kudos/:id/react` | Toggle single emoji reaction (`+1`, `👏`, `🔥`, `❤️`, `🚀`) | Protected | `{ "emoji": "🔥" }` |
+
+#### 3. User Directory & Profile Customization (`/api/users`)
+
+| Method | Endpoint | Description | Auth | Request Body / Query Params |
+|---|---|---|---|---|
+| `GET`  | `/api/users` | List teammates for recognition autocomplete | Optional | Query: `?search=name&department=Design` |
+| `GET`  | `/api/users/:id/profile` | View user profile, badges, and received/sent history | Optional | Param: `id` |
+| `PUT`  | `/api/users/profile` | Update profile info, custom avatar, or local PC photo | Protected | `{ "name": "...", "department": "...", "avatar": "data:image/..." }` |
+
+#### 4. Analytics & Leaderboard Endpoints (`/api/analytics`)
+
+| Method | Endpoint | Description | Auth | Request Body / Query Params |
+|---|---|---|---|---|
+| `GET`  | `/api/analytics/leaderboard` | Monthly leaderboard via MongoDB aggregation pipeline | Optional | Query: `?month=current&department=ALL` |
+| `GET`  | `/api/analytics/summary` | Organizational metrics, core values distribution | Optional | None |
+| `POST` | `/api/analytics/reset-monthly-allowance` | Reset giving allowance back to 100 points for all users | Protected | None |
+
+---
+
+### C. Example cURL Commands for Evaluators
+
+#### 1. Quick Login as Demo User
+```bash
+curl -X POST http://localhost:5000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"alex.rivera@company.internal","password":"Password123!"}' \
+  -c cookies.txt
+```
+
+#### 2. Send Kudos with Atomic Point Transfer
+```bash
+curl -X POST http://localhost:5000/api/kudos \
+  -H "Content-Type: application/json" \
+  -b cookies.txt \
+  -d '{
+    "receiverId": "65fc1234567890abcdef1234",
+    "points": 20,
+    "companyValue": "Innovation",
+    "message": "Outstanding work spearheading the new design system primitives!"
+  }'
+```
+
+#### 3. React to Kudos with Single Emoji Reaction
+```bash
+curl -X POST http://localhost:5000/api/kudos/65fc1234567890abcdef5678/react \
+  -H "Content-Type: application/json" \
+  -b cookies.txt \
+  -d '{"emoji":"🔥"}'
+```
+
+#### 4. View Monthly Leaderboard via Aggregation Pipeline
+```bash
+curl -X GET "http://localhost:5000/api/analytics/leaderboard?department=Engineering"
+```
 
 ---
 

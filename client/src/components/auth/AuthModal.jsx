@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Lock, Mail, User, Building, ShieldCheck, KeyRound, ArrowRight } from 'lucide-react';
+import { X, Lock, Mail, User, Building, ShieldCheck, KeyRound, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { authService } from '../../services/api';
 import { useToast } from '../../context/ToastContext';
@@ -25,6 +25,7 @@ export const AuthModal = () => {
   const [department, setDepartment] = useState('Engineering');
   const [token, setToken] = useState(authModal.simulatedEmail?.token || '');
   const [submitting, setSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   if (!authModal.isOpen) return null;
 
@@ -141,7 +142,7 @@ export const AuthModal = () => {
                 padding: '0.85rem',
                 marginBottom: '1.25rem'
               }}>
-                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#a5b4fc', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--accent-primary)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
                   <ShieldCheck size={14} /> ⚡ 1-Click Evaluator Quick-Login:
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.4rem' }}>
@@ -184,14 +185,42 @@ export const AuthModal = () => {
                       Forgot?
                     </button>
                   </div>
-                  <input
-                    type="password"
-                    required
-                    className="coss-input"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
+                  <div style={{ position: 'relative' }}>
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      required
+                      className="coss-input"
+                      placeholder="••••••••"
+                      style={{ paddingRight: '2.5rem' }}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      style={{
+                        position: 'absolute',
+                        right: '0.75rem',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: 'var(--text-muted)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '0.25rem',
+                        transition: 'color var(--transition-fast)'
+                      }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-primary)')}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
+                      title={showPassword ? 'Hide password' : 'Show password'}
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
                 </div>
 
                 <button
@@ -259,15 +288,43 @@ export const AuthModal = () => {
 
               <div className="coss-form-group">
                 <label className="coss-label">Password (min 6 chars)</label>
-                <input
-                  type="password"
-                  required
-                  minLength={6}
-                  className="coss-input"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    minLength={6}
+                    className="coss-input"
+                    placeholder="••••••••"
+                    style={{ paddingRight: '2.5rem' }}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{
+                      position: 'absolute',
+                      right: '0.75rem',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      color: 'var(--text-muted)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: '0.25rem',
+                      transition: 'color var(--transition-fast)'
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-primary)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
+                    title={showPassword ? 'Hide password' : 'Show password'}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
               </div>
 
               <button
@@ -302,7 +359,7 @@ export const AuthModal = () => {
                 padding: '0.85rem',
                 marginBottom: '1.25rem'
               }}>
-                <div style={{ fontSize: '0.8125rem', color: '#6ee7b7', fontWeight: 600 }}>
+                <div style={{ fontSize: '0.8125rem', color: 'var(--accent-success)', fontWeight: 700 }}>
                   ✉️ Verification Email Simulated
                 </div>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
@@ -402,15 +459,43 @@ export const AuthModal = () => {
 
               <div className="coss-form-group">
                 <label className="coss-label">New Password</label>
-                <input
-                  type="password"
-                  required
-                  minLength={6}
-                  className="coss-input"
-                  placeholder="At least 6 characters"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    minLength={6}
+                    className="coss-input"
+                    placeholder="At least 6 characters"
+                    style={{ paddingRight: '2.5rem' }}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{
+                      position: 'absolute',
+                      right: '0.75rem',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      color: 'var(--text-muted)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: '0.25rem',
+                      transition: 'color var(--transition-fast)'
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-primary)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
+                    title={showPassword ? 'Hide password' : 'Show password'}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
               </div>
 
               <button

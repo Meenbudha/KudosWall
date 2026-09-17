@@ -107,6 +107,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateUser = (updatedData) => {
+    setUser((prev) => (prev ? { ...prev, ...updatedData } : prev));
+  };
+
   const openAuthModal = (view = 'login', extra = {}) => {
     setAuthModal({ isOpen: true, view, ...extra });
   };
@@ -125,6 +129,7 @@ export const AuthProvider = ({ children }) => {
         verifyEmail,
         logout,
         refreshUser,
+        updateUser,
         authModal,
         openAuthModal,
         closeAuthModal

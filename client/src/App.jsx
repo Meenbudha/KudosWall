@@ -10,7 +10,6 @@ import { SidebarWidgets } from './components/layout/SidebarWidgets';
 import { GiveKudosModal } from './components/feed/GiveKudosModal';
 import { AuthModal } from './components/auth/AuthModal';
 import { SimulatedInboxModal } from './components/simulated/SimulatedInboxModal';
-import { ApiDocsModal } from './components/docs/ApiDocsModal';
 
 const AppContent = () => {
   const { user, openAuthModal } = useAuth();
@@ -20,7 +19,6 @@ const AppContent = () => {
 
   const [giveKudosOpen, setGiveKudosOpen] = useState(false);
   const [inboxOpen, setInboxOpen] = useState(false);
-  const [docsOpen, setDocsOpen] = useState(false);
   const [newlyCreatedKudos, setNewlyCreatedKudos] = useState(null);
 
   const handleOpenGiveKudos = () => {
@@ -49,7 +47,6 @@ const AppContent = () => {
         }}
         onOpenGiveKudos={handleOpenGiveKudos}
         onOpenInbox={() => setInboxOpen(true)}
-        onOpenDocs={() => setDocsOpen(true)}
       />
 
       {/* Main Content Area */}
@@ -136,11 +133,6 @@ const AppContent = () => {
       <SimulatedInboxModal
         isOpen={inboxOpen}
         onClose={() => setInboxOpen(false)}
-      />
-
-      <ApiDocsModal
-        isOpen={docsOpen}
-        onClose={() => setDocsOpen(false)}
       />
     </div>
   );
