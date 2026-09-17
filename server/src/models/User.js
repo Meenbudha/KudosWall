@@ -41,8 +41,8 @@ const userSchema = new mongoose.Schema({
   department: {
     type: String,
     required: [true, 'Department is required'],
-    enum: ['Engineering', 'Design', 'Marketing', 'Sales', 'Product', 'HR'],
-    default: 'Engineering'
+    enum: ['Developer', 'Design', 'Marketing', 'Sales', 'Product', 'HR'],
+    default: 'Developer'
   },
   givingAllowance: {
     type: Number,

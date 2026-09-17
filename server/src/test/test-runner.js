@@ -25,8 +25,8 @@ async function runTests() {
     const mockUser = {
       _id: new mongoose.Types.ObjectId(),
       email: 'test.user@company.internal',
-      department: 'Engineering',
-      name: 'Test Engineer'
+      department: 'Developer',
+      name: 'Test Developer'
     };
     const { accessToken, refreshToken } = generateTokens(mockUser);
     assert(accessToken, 'Access token should be generated');

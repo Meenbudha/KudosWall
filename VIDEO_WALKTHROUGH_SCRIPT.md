@@ -50,7 +50,7 @@
 - Click the **Leaderboard** tab.
 - Show the **Top 3 Podium** (🥇, 🥈, 🥉) and the ranked table.
 - Explain the backend logic: *"This is powered by a MongoDB aggregation pipeline using `$match`, `$group`, `$lookup`, `$unwind`, and `$sort`, dynamically filtering by department and month."*
-- Demonstrate department filtering (e.g. click 'Design' or 'Engineering').
+- Demonstrate department filtering (e.g. click 'Design' or 'Developer').
 
 #### 5. Analytics & Monthly Reset Simulator
 - Click the **Analytics** tab.

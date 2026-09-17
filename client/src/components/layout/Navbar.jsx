@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
-export const Navbar = ({ activeTab, setActiveTab, onOpenGiveKudos, onOpenInbox }) => {
+export const Navbar = ({ activeTab, setActiveTab, onOpenMyProfile, onOpenGiveKudos, onOpenInbox }) => {
   const { user, logout, openAuthModal } = useAuth();
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [theme, setTheme] = useState(localStorage.getItem('kudos_theme') || 'dark');
@@ -106,11 +106,20 @@ export const Navbar = ({ activeTab, setActiveTab, onOpenGiveKudos, onOpenInbox }
 
         {/* Right Section: Wallets, Controls, Give Kudos, Profile */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          {/* Theme Switcher */}
+          {/* Theme Switcher with 1cm breathing space */}
           <button
             onClick={toggleTheme}
             className="coss-btn coss-btn-ghost coss-btn-sm"
-            style={{ padding: '0.45rem', borderRadius: 'var(--radius-full)' }}
+            style={{ 
+              padding: '0.45rem', 
+              borderRadius: 'var(--radius-full)',
+              margin: '0 1cm',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              border: '1px solid var(--border-subtle)',
+              background: 'var(--bg-surface-elevated)'
+            }}
             title={`Switch to ${theme === 'dark' ? 'Daylight Light' : 'Deep Dark'} mode`}
           >
             {theme === 'dark' ? <Sun size={18} color="#fbbf24" /> : <Moon size={18} color="#6366f1" />}
@@ -142,8 +151,8 @@ export const Navbar = ({ activeTab, setActiveTab, onOpenGiveKudos, onOpenInbox }
               <div 
                 className="points-chip"
                 style={{ cursor: 'pointer', fontSize: '0.8rem' }}
-                onClick={() => setActiveTab('profile')}
-                title="Your cumulative earned recognition points"
+                onClick={() => onOpenMyProfile ? onOpenMyProfile() : setActiveTab('profile')}
+                title="Your cumulative earned recognition points (Click to view profile)"
               >
                 <Sparkles size={14} />
                 <span><strong>{user.earnedPoints}</strong> earned</span>
@@ -196,7 +205,15 @@ export const Navbar = ({ activeTab, setActiveTab, onOpenGiveKudos, onOpenInbox }
                     zIndex: 100,
                     animation: 'slideUp 0.2s ease-out'
                   }}>
-                    <div style={{ padding: '0.6rem 0.75rem', borderBottom: '1px solid var(--border-subtle)' }}>
+                    <div 
+                      style={{ padding: '0.6rem 0.75rem', borderBottom: '1px solid var(--border-subtle)', cursor: 'pointer' }}
+                      onClick={() => {
+                        if (onOpenMyProfile) onOpenMyProfile();
+                        else setActiveTab('profile');
+                        setUserDropdownOpen(false);
+                      }}
+                      title="View my profile"
+                    >
                       <div style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--text-primary)' }}>{user.name}</div>
                       <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{user.email}</div>
                       <div className="coss-badge coss-badge-violet" style={{ marginTop: '0.4rem' }}>
@@ -206,7 +223,11 @@ export const Navbar = ({ activeTab, setActiveTab, onOpenGiveKudos, onOpenInbox }
 
                     <div style={{ padding: '0.4rem 0' }}>
                       <button
-                        onClick={() => { setActiveTab('profile'); setUserDropdownOpen(false); }}
+                        onClick={() => {
+                          if (onOpenMyProfile) onOpenMyProfile();
+                          else setActiveTab('profile');
+                          setUserDropdownOpen(false);
+                        }}
                         className="coss-btn coss-btn-ghost"
                         style={{ width: '100%', justifyContent: 'flex-start', fontSize: '0.8125rem' }}
                       >

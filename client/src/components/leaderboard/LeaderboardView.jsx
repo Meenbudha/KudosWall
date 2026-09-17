@@ -11,7 +11,7 @@ import {
 import { analyticsService } from '../../services/api';
 import { soundEffects } from '../../utils/effects';
 
-const DEPARTMENTS = ['ALL', 'Engineering', 'Design', 'Marketing', 'Sales', 'Product', 'HR'];
+const DEPARTMENTS = ['ALL', 'Developer', 'Design', 'Marketing', 'Sales', 'Product', 'HR'];
 const TIMEFRAMES = [
   { id: 'current_month', label: 'This Month' },
   { id: 'last_30_days', label: 'Last 30 Days' },

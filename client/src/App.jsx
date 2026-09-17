@@ -30,10 +30,13 @@ const AppContent = () => {
   };
 
   const handleUserClick = (id) => {
-    if (id) {
-      setViewingUserId(id);
-      setActiveTab('profile');
-    }
+    setViewingUserId(id || null);
+    setActiveTab('profile');
+  };
+
+  const handleOpenMyProfile = () => {
+    setViewingUserId(null);
+    setActiveTab('profile');
   };
 
   return (
@@ -42,9 +45,10 @@ const AppContent = () => {
       <Navbar
         activeTab={activeTab}
         setActiveTab={(tab) => {
-          if (tab !== 'profile') setViewingUserId(null);
+          setViewingUserId(null);
           setActiveTab(tab);
         }}
+        onOpenMyProfile={handleOpenMyProfile}
         onOpenGiveKudos={handleOpenGiveKudos}
         onOpenInbox={() => setInboxOpen(true)}
       />
@@ -94,6 +98,7 @@ const AppContent = () => {
               setActiveTab('feed');
             }}
             onOpenGiveKudos={handleOpenGiveKudos}
+            onUserClick={handleUserClick}
           />
         )}
       </main>

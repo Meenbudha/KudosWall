@@ -28,7 +28,7 @@ const BADGE_CATALOG = [
   { id: 'team_pillar', name: 'Team Pillar', icon: '🏛️', description: 'Received recognition from 3+ distinct colleagues.' }
 ];
 
-export const ProfileView = ({ userId, onBack, onOpenGiveKudos }) => {
+export const ProfileView = ({ userId, onBack, onOpenGiveKudos, onUserClick }) => {
   const { user: currentUser } = useAuth();
   const targetId = userId || currentUser?.id || currentUser?._id;
 
@@ -357,7 +357,7 @@ export const ProfileView = ({ userId, onBack, onOpenGiveKudos }) => {
               </div>
             ) : (
               receivedKudos.map((k) => (
-                <KudosCard key={k._id} kudos={k} />
+                <KudosCard key={k._id} kudos={k} onUserClick={onUserClick} />
               ))
             )}
           </div>
@@ -369,7 +369,7 @@ export const ProfileView = ({ userId, onBack, onOpenGiveKudos }) => {
               </div>
             ) : (
               sentKudos.map((k) => (
-                <KudosCard key={k._id} kudos={k} />
+                <KudosCard key={k._id} kudos={k} onUserClick={onUserClick} />
               ))
             )}
           </div>

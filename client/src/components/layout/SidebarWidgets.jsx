@@ -47,7 +47,11 @@ export const SidebarWidgets = ({ onOpenGiveKudos, onUserClick, setActiveTab }) =
       {/* User Recognition Wallet Spotlight */}
       {user ? (
         <div className="coss-card coss-card-glow" style={{ padding: '1.4rem', borderRadius: 'var(--radius-lg)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '1.25rem' }}>
+          <div 
+            style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '1.25rem', cursor: 'pointer' }}
+            onClick={() => onUserClick ? onUserClick(null) : null}
+            title="Click to view your profile and badges"
+          >
             <img
               src={user.avatar}
               alt={user.name}

@@ -1,6 +1,6 @@
 # KudosWall • Internal Team Feedback & Peer Recognition Platform
 > **A high-performance peer recognition and kudos system inspired by Bonusly and Matter.**  
-> Built for modern engineering and product cultures with pair-token JWT security, atomic point transaction safety, live leaderboards powered by MongoDB aggregation pipelines, and a polished Coss UI design system.
+> Company recognition platform where team members receive a monthly allowance of points to celebrate peers alongside core company values, featuring a social feed and live monthly leaderboards.
 
 ---
 
@@ -140,9 +140,9 @@ npm run seed
 ```
 
 **Pre-seeded Demo Accounts (Password for all: `Password123!`):**
-- **Alex Rivera** (`alex.rivera@company.internal`) — Engineering (Allowance: 60 pts, Earned: 190 pts)
+- **Alex Rivera** (`alex.rivera@company.internal`) — Developer (Allowance: 60 pts, Earned: 190 pts)
 - **Sarah Chen** (`sarah.chen@company.internal`) — Design (Allowance: 40 pts, Earned: 240 pts)
-- **Marcus Vance** (`marcus.vance@company.internal`) — Engineering (Allowance: 80 pts, Earned: 130 pts)
+- **Marcus Vance** (`marcus.vance@company.internal`) — Developer (Allowance: 80 pts, Earned: 130 pts)
 - **Elena Rostova** (`elena.rostova@company.internal`) — Product (Allowance: 50 pts, Earned: 170 pts)
 - **David Kim** (`david.kim@company.internal`) — Marketing (Allowance: 70 pts, Earned: 90 pts)
 - **Priya Patel** (`priya.patel@company.internal`) — Sales (Allowance: 30 pts, Earned: 150 pts)
@@ -199,7 +199,7 @@ Client Request ──► [cookieParser / Bearer Header] ──► [authMiddlewar
 
 | Method | Endpoint | Description | Auth | Request Body / Query Params |
 |---|---|---|---|---|
-| `POST` | `/api/auth/signup` | Register new account and generate simulated verification email | Public | `{ "name": "...", "email": "...", "password": "...", "department": "Engineering" }` |
+| `POST` | `/api/auth/signup` | Register new account and generate simulated verification email | Public | `{ "name": "...", "email": "...", "password": "...", "department": "Developer" }` |
 | `POST` | `/api/auth/verify-email` | Verify account via token and issue pair cookies | Public | `{ "token": "...", "email": "..." }` |
 | `POST` | `/api/auth/login` | Authenticate with credentials, sets 15m + 7d cookies | Public | `{ "email": "...", "password": "..." }` |
 | `POST` | `/api/auth/refresh` | Rotate tokens; revokes old refresh token and re-issues fresh pair | Cookie / Header | None (uses `refreshToken` cookie) |
@@ -214,7 +214,7 @@ Client Request ──► [cookieParser / Bearer Header] ──► [authMiddlewar
 | Method | Endpoint | Description | Auth | Request Body / Query Params |
 |---|---|---|---|---|
 | `POST` | `/api/kudos` | Send kudos with atomic point deduction & audit logging | Protected | `{ "receiverId": "...", "points": 20, "message": "...", "companyValue": "Innovation" }` |
-| `GET`  | `/api/kudos` | Fetch paginated recognition stream | Optional | Query: `?page=1&limit=10&department=Engineering&value=Innovation&search=query` |
+| `GET`  | `/api/kudos` | Fetch paginated recognition stream | Optional | Query: `?page=1&limit=10&department=Developer&value=Innovation&search=query` |
 | `GET`  | `/api/kudos/:id` | Fetch a single kudos item with sender/receiver details | Optional | Param: `id` |
 | `POST` | `/api/kudos/:id/react` | Toggle single emoji reaction (`+1`, `👏`, `🔥`, `❤️`, `🚀`) | Protected | `{ "emoji": "🔥" }` |
 
@@ -269,7 +269,7 @@ curl -X POST http://localhost:5000/api/kudos/65fc1234567890abcdef5678/react \
 
 #### 4. View Monthly Leaderboard via Aggregation Pipeline
 ```bash
-curl -X GET "http://localhost:5000/api/analytics/leaderboard?department=Engineering"
+curl -X GET "http://localhost:5000/api/analytics/leaderboard?department=Developer"
 ```
 
 ---

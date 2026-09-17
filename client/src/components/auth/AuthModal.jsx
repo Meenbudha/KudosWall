@@ -4,12 +4,12 @@ import { useAuth } from '../../context/AuthContext';
 import { authService } from '../../services/api';
 import { useToast } from '../../context/ToastContext';
 
-const DEPARTMENTS = ['Engineering', 'Design', 'Marketing', 'Sales', 'Product', 'HR'];
+const DEPARTMENTS = ['Developer', 'Design', 'Marketing', 'Sales', 'Product', 'HR'];
 
 const DEMO_USERS = [
-  { name: 'Alex Rivera', email: 'alex.rivera@company.internal', dept: 'Engineering', role: 'Staff Engineer' },
+  { name: 'Alex Rivera', email: 'alex.rivera@company.internal', dept: 'Developer', role: 'Staff Developer' },
   { name: 'Sarah Chen', email: 'sarah.chen@company.internal', dept: 'Design', role: 'Principal Designer' },
-  { name: 'Marcus Vance', email: 'marcus.vance@company.internal', dept: 'Engineering', role: 'Backend Lead' },
+  { name: 'Marcus Vance', email: 'marcus.vance@company.internal', dept: 'Developer', role: 'Backend Lead' },
   { name: 'Elena Rostova', email: 'elena.rostova@company.internal', dept: 'Product', role: 'Product Lead' },
   { name: 'David Kim', email: 'david.kim@company.internal', dept: 'Marketing', role: 'Growth Specialist' },
   { name: 'Priya Patel', email: 'priya.patel@company.internal', dept: 'Sales', role: 'Account Executive' }
@@ -22,7 +22,7 @@ export const AuthModal = () => {
   const [email, setEmail] = useState(authModal.email || '');
   const [password, setPassword] = useState('Password123!');
   const [name, setName] = useState('');
-  const [department, setDepartment] = useState('Engineering');
+  const [department, setDepartment] = useState('Developer');
   const [token, setToken] = useState(authModal.simulatedEmail?.token || '');
   const [submitting, setSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);

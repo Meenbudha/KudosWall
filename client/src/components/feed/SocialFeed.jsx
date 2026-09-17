@@ -24,7 +24,7 @@ const VALUE_FILTERS = [
   '#BiasForAction'
 ];
 
-const DEPARTMENTS = ['ALL', 'Engineering', 'Design', 'Marketing', 'Sales', 'Product', 'HR'];
+const DEPARTMENTS = ['ALL', 'Developer', 'Design', 'Marketing', 'Sales', 'Product', 'HR'];
 
 export const SocialFeed = ({ onOpenGiveKudos, onUserClick, newKudosItem }) => {
   const { user, openAuthModal } = useAuth();
