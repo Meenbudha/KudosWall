@@ -12,9 +12,11 @@ import {
   CheckCircle2,
   Calendar
 } from 'lucide-react';
+import confetti from 'canvas-confetti';
 import { userService } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import { KudosCard } from '../feed/KudosCard';
+import { soundEffects } from '../../utils/effects';
 
 const BADGE_CATALOG = [
   { id: 'first_kudos', name: 'Culture Starter', icon: '🌱', description: 'Sent your very first peer kudos!' },
@@ -46,9 +48,24 @@ export const ProfileView = ({ userId, onBack, onOpenGiveKudos }) => {
     }
   }, [targetId]);
 
+  const handleBadgeClick = (isUnlocked, badgeName) => {
+    soundEffects.playPop();
+    if (isUnlocked) {
+      try {
+        confetti({
+          particleCount: 50,
+          spread: 60,
+          origin: { y: 0.7 }
+        });
+      } catch {
+        // Ignore
+      }
+    }
+  };
+
   if (loading) {
     return (
-      <div style={{ textAlign: 'center', padding: '4rem 0' }}>
+      <div style={{ textAlign: 'center', padding: '4.5rem 0' }}>
         <p style={{ color: 'var(--text-muted)' }}>Loading profile data...</p>
       </div>
     );
@@ -56,7 +73,7 @@ export const ProfileView = ({ userId, onBack, onOpenGiveKudos }) => {
 
   if (!profileData?.user) {
     return (
-      <div className="coss-card" style={{ textAlign: 'center', padding: '3rem' }}>
+      <div className="coss-card" style={{ textAlign: 'center', padding: '3.5rem' }}>
         <p>User profile could not be loaded.</p>
         <button onClick={onBack} className="coss-btn coss-btn-outline" style={{ marginTop: '1rem' }}>
           Go Back
@@ -69,21 +86,21 @@ export const ProfileView = ({ userId, onBack, onOpenGiveKudos }) => {
   const earnedBadgeIds = new Set((user.badges || []).map((b) => b.id));
 
   return (
-    <div style={{ maxWidth: 840, margin: '0 auto' }}>
+    <div style={{ maxWidth: 880, margin: '0 auto' }}>
       {/* Back button if navigating from feed or leaderboard */}
       {onBack && (
         <button
-          onClick={onBack}
+          onClick={() => { soundEffects.playPop(); onBack(); }}
           className="coss-btn coss-btn-ghost coss-btn-sm"
-          style={{ marginBottom: '1rem' }}
+          style={{ marginBottom: '1.25rem' }}
         >
           <ArrowLeft size={16} />
           Back to Wall
         </button>
       )}
 
-      {/* Profile Header Card */}
-      <div className="coss-card" style={{ marginBottom: '1.5rem', padding: '2rem' }}>
+      {/* Profile Header Card with Radiant Gradient Background */}
+      <div className="coss-card coss-card-glow" style={{ marginBottom: '1.75rem', padding: '2.25rem' }}>
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -91,24 +108,24 @@ export const ProfileView = ({ userId, onBack, onOpenGiveKudos }) => {
           flexWrap: 'wrap',
           gap: '1.5rem'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.75rem' }}>
             <img
               src={user.avatar}
               alt={user.name}
               className="coss-avatar coss-avatar-xl"
-              style={{ border: '3px solid var(--accent-primary)', boxShadow: 'var(--shadow-glow)' }}
+              style={{ border: '4px solid var(--accent-primary)', boxShadow: '0 0 25px rgba(99, 102, 241, 0.5)' }}
             />
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                <h1 style={{ fontSize: '1.6rem', color: '#fff' }}>{user.name}</h1>
-                <span className="coss-badge coss-badge-violet">{user.department}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <h1 style={{ fontSize: '1.75rem', color: 'var(--text-primary)' }}>{user.name}</h1>
+                <span className="coss-badge coss-badge-violet" style={{ fontSize: '0.8rem' }}>{user.department}</span>
               </div>
-              <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+              <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: '0.35rem' }}>
                 {user.email}
               </p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
-                <Calendar size={13} />
-                <span>Joined Internal Kudos Network</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '0.6rem' }}>
+                <Calendar size={14} color="var(--accent-primary)" />
+                <span>Internal Kudos Network Member</span>
               </div>
             </div>
           </div>
@@ -116,10 +133,11 @@ export const ProfileView = ({ userId, onBack, onOpenGiveKudos }) => {
           {/* Action if viewing another peer */}
           {currentUser && (currentUser.id || currentUser._id) !== user._id && (
             <button
-              onClick={onOpenGiveKudos}
-              className="coss-btn coss-btn-primary"
+              onClick={() => { soundEffects.playPop(); onOpenGiveKudos(); }}
+              className="coss-btn coss-btn-primary coss-btn-lg"
+              style={{ borderRadius: 'var(--radius-full)' }}
             >
-              <Gift size={16} />
+              <Gift size={18} />
               Give Kudos to {user.name.split(' ')[0]}
             </button>
           )}
@@ -128,65 +146,68 @@ export const ProfileView = ({ userId, onBack, onOpenGiveKudos }) => {
         {/* Recognition Wallets Row */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '1rem',
-          marginTop: '2rem',
-          paddingTop: '1.5rem',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+          gap: '1.25rem',
+          marginTop: '2.25rem',
+          paddingTop: '1.75rem',
           borderTop: '1px solid var(--border-subtle)'
         }}>
           {/* Monthly Giving Allowance Wallet */}
           <div style={{
-            background: 'rgba(99, 102, 241, 0.08)',
-            border: '1px solid rgba(99, 102, 241, 0.2)',
+            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.14) 0%, rgba(99, 102, 241, 0.05) 100%)',
+            border: '1px solid rgba(99, 102, 241, 0.35)',
             borderRadius: 'var(--radius-md)',
-            padding: '1.25rem'
+            padding: '1.35rem',
+            boxShadow: '0 4px 14px rgba(99, 102, 241, 0.15)'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>Monthly Giving Allowance</span>
-              <Gift size={18} color="var(--accent-primary)" />
+              <span style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Monthly Giving Allowance</span>
+              <Gift size={20} color="var(--accent-primary)" />
             </div>
-            <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#fff', margin: '0.5rem 0 0.25rem' }}>
-              {user.givingAllowance} <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontWeight: 500 }}>/ 100 pts</span>
+            <div style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--text-primary)', margin: '0.6rem 0 0.3rem' }}>
+              {user.givingAllowance} <span style={{ fontSize: '0.95rem', color: 'var(--text-muted)', fontWeight: 600 }}>/ 100 pts</span>
             </div>
-            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
               Refreshes to 100 pts on 1st of every month
             </span>
           </div>
 
           {/* Earned Recognition Points Wallet */}
           <div style={{
-            background: 'rgba(16, 185, 129, 0.08)',
-            border: '1px solid rgba(16, 185, 129, 0.2)',
+            background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.14) 0%, rgba(16, 185, 129, 0.05) 100%)',
+            border: '1px solid rgba(16, 185, 129, 0.35)',
             borderRadius: 'var(--radius-md)',
-            padding: '1.25rem'
+            padding: '1.35rem',
+            boxShadow: '0 4px 14px rgba(16, 185, 129, 0.15)'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>Cumulative Earned Points</span>
-              <Sparkles size={18} color="var(--accent-success)" />
+              <span style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Cumulative Earned Points</span>
+              <Sparkles size={20} color="var(--accent-success)" />
             </div>
-            <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--accent-success)', margin: '0.5rem 0 0.25rem' }}>
-              {user.earnedPoints} <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontWeight: 500 }}>pts</span>
+            <div style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--accent-success)', margin: '0.6rem 0 0.3rem' }}>
+              {user.earnedPoints} <span style={{ fontSize: '0.95rem', color: 'var(--text-muted)', fontWeight: 600 }}>pts</span>
             </div>
-            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
               From {stats.countReceived} received peer recognitions
             </span>
           </div>
 
           {/* Badges Count */}
           <div style={{
-            background: 'rgba(245, 158, 11, 0.08)',
-            border: '1px solid rgba(245, 158, 11, 0.2)',
+            background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.14) 0%, rgba(245, 158, 11, 0.05) 100%)',
+            border: '1px solid rgba(245, 158, 11, 0.35)',
             borderRadius: 'var(--radius-md)',
-            padding: '1.25rem'
+            padding: '1.35rem',
+            boxShadow: '0 4px 14px rgba(245, 158, 11, 0.15)'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>Earned Badges</span>
-              <Award size={18} color="var(--accent-warning)" />
+              <span style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Earned Badges</span>
+              <Award size={20} color="var(--accent-warning)" />
             </div>
-            <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--accent-warning)', margin: '0.5rem 0 0.25rem' }}>
-              {user.badges?.length || 0} <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontWeight: 500 }}>unlocked</span>
+            <div style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--accent-warning)', margin: '0.6rem 0 0.3rem' }}>
+              {user.badges?.length || 0} <span style={{ fontSize: '0.95rem', color: 'var(--text-muted)', fontWeight: 600 }}>unlocked</span>
             </div>
-            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
               Milestones in teamwork & culture
             </span>
           </div>
@@ -194,49 +215,54 @@ export const ProfileView = ({ userId, onBack, onOpenGiveKudos }) => {
       </div>
 
       {/* Badges Showcase Grid */}
-      <div className="coss-card" style={{ marginBottom: '1.5rem', padding: '1.5rem' }}>
-        <h3 style={{ fontSize: '1.1rem', marginBottom: '0.35rem' }}>Recognition Badges</h3>
-        <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
-          Milestones earned by giving and receiving peer feedback
+      <div className="coss-card" style={{ marginBottom: '1.75rem', padding: '1.75rem' }}>
+        <h3 style={{ fontSize: '1.2rem', marginBottom: '0.35rem', color: 'var(--text-primary)' }}>Recognition Badges</h3>
+        <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', marginBottom: '1.35rem' }}>
+          Milestones earned through peer feedback and participation. Click any unlocked badge to celebrate!
         </p>
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-          gap: '0.85rem'
+          gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+          gap: '1rem'
         }}>
           {BADGE_CATALOG.map((b) => {
             const isUnlocked = earnedBadgeIds.has(b.id);
             return (
               <div
                 key={b.id}
+                onClick={() => handleBadgeClick(isUnlocked, b.name)}
                 style={{
-                  background: isUnlocked ? 'rgba(255, 255, 255, 0.04)' : 'rgba(255, 255, 255, 0.01)',
-                  border: `1px solid ${isUnlocked ? 'var(--border-medium)' : 'var(--border-subtle)'}`,
+                  background: isUnlocked ? 'var(--bg-surface-elevated)' : 'rgba(255, 255, 255, 0.02)',
+                  border: `1px solid ${isUnlocked ? 'var(--accent-primary)' : 'var(--border-subtle)'}`,
                   borderRadius: 'var(--radius-md)',
-                  padding: '1rem',
+                  padding: '1.15rem',
                   display: 'flex',
                   alignItems: 'flex-start',
-                  gap: '0.85rem',
+                  gap: '1rem',
                   opacity: isUnlocked ? 1 : 0.45,
-                  transition: 'all var(--transition-fast)'
+                  cursor: isUnlocked ? 'pointer' : 'default',
+                  transition: 'all 0.2s ease',
+                  boxShadow: isUnlocked ? '0 4px 12px rgba(99, 102, 241, 0.15)' : 'none'
                 }}
+                onMouseEnter={(e) => isUnlocked && (e.currentTarget.style.transform = 'translateY(-2px)')}
+                onMouseLeave={(e) => isUnlocked && (e.currentTarget.style.transform = 'translateY(0)')}
               >
                 <div style={{
-                  fontSize: '1.75rem',
+                  fontSize: '2rem',
                   lineHeight: 1,
-                  filter: isUnlocked ? 'none' : 'grayscale(100%)'
+                  filter: isUnlocked ? 'drop-shadow(0 2px 6px rgba(99, 102, 241, 0.4))' : 'grayscale(100%)'
                 }}>
                   {b.icon}
                 </div>
                 <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                    <div style={{ fontWeight: 700, fontSize: '0.875rem', color: isUnlocked ? '#fff' : 'var(--text-muted)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <div style={{ fontWeight: 800, fontSize: '0.92rem', color: isUnlocked ? 'var(--text-primary)' : 'var(--text-muted)' }}>
                       {b.name}
                     </div>
-                    {isUnlocked && <CheckCircle2 size={13} color="var(--accent-success)" />}
+                    {isUnlocked && <CheckCircle2 size={15} color="var(--accent-success)" />}
                   </div>
-                  <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
                     {b.description}
                   </div>
                 </div>
@@ -248,17 +274,17 @@ export const ProfileView = ({ userId, onBack, onOpenGiveKudos }) => {
 
       {/* Kudos History Tabs: Received vs Sent */}
       <div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
           <div className="coss-tabs-list">
             <button
-              onClick={() => setActiveHistoryTab('received')}
+              onClick={() => { soundEffects.playPop(); setActiveHistoryTab('received'); }}
               className={`coss-tab-trigger ${activeHistoryTab === 'received' ? 'active' : ''}`}
             >
               <Inbox size={15} />
               Received ({receivedKudos.length})
             </button>
             <button
-              onClick={() => setActiveHistoryTab('sent')}
+              onClick={() => { soundEffects.playPop(); setActiveHistoryTab('sent'); }}
               className={`coss-tab-trigger ${activeHistoryTab === 'sent' ? 'active' : ''}`}
             >
               <Send size={15} />
@@ -270,7 +296,7 @@ export const ProfileView = ({ userId, onBack, onOpenGiveKudos }) => {
         {activeHistoryTab === 'received' ? (
           <div>
             {receivedKudos.length === 0 ? (
-              <div className="coss-card" style={{ textAlign: 'center', padding: '2.5rem' }}>
+              <div className="coss-card" style={{ textAlign: 'center', padding: '3rem' }}>
                 <p style={{ color: 'var(--text-muted)' }}>No kudos received yet.</p>
               </div>
             ) : (
@@ -282,7 +308,7 @@ export const ProfileView = ({ userId, onBack, onOpenGiveKudos }) => {
         ) : (
           <div>
             {sentKudos.length === 0 ? (
-              <div className="coss-card" style={{ textAlign: 'center', padding: '2.5rem' }}>
+              <div className="coss-card" style={{ textAlign: 'center', padding: '3rem' }}>
                 <p style={{ color: 'var(--text-muted)' }}>No kudos sent yet.</p>
               </div>
             ) : (

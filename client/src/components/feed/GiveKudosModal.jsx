@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { X, Sparkles, Send, AlertTriangle, Check, Search, ShieldCheck } from 'lucide-react';
+import { X, Sparkles, Send, AlertTriangle, Search, ShieldCheck } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useAuth } from '../../context/AuthContext';
 import { userService, kudosService } from '../../services/api';
 import { useToast } from '../../context/ToastContext';
+import { soundEffects } from '../../utils/effects';
 
 const COMPANY_VALUES = [
   { tag: '#Teamwork', description: 'Cross-functional collaboration & helping teammates' },
@@ -88,15 +89,18 @@ export const GiveKudosModal = ({ isOpen, onClose, onKudosCreated }) => {
       });
 
       if (res.data?.success) {
-        // Trigger celebratory confetti effect
+        // Play celebratory chime sound
+        soundEffects.playChime();
+
+        // Multi-stage confetti celebration
         try {
           confetti({
-            particleCount: 80,
-            spread: 60,
+            particleCount: 100,
+            spread: 70,
             origin: { y: 0.6 }
           });
         } catch {
-          // Ignore if canvas unsupported
+          // Ignore
         }
 
         showToast(res.data.message || 'Kudos sent successfully!', 'success');
@@ -120,24 +124,25 @@ export const GiveKudosModal = ({ isOpen, onClose, onKudosCreated }) => {
 
   return (
     <div className="coss-dialog-backdrop" onClick={onClose}>
-      <div className="coss-dialog-panel" onClick={(e) => e.stopPropagation()} style={{ maxWidth: 580 }}>
+      <div className="coss-dialog-panel" onClick={(e) => e.stopPropagation()} style={{ maxWidth: 600 }}>
         {/* Header */}
         <div className="coss-dialog-header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <div style={{
-              width: 32,
-              height: 32,
+              width: 36,
+              height: 36,
               borderRadius: 'var(--radius-sm)',
-              background: 'rgba(99, 102, 241, 0.2)',
+              background: 'var(--gradient-primary)',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              boxShadow: '0 4px 12px rgba(99, 102, 241, 0.4)'
             }}>
-              <Sparkles size={18} color="var(--accent-primary)" />
+              <Sparkles size={20} color="#fff" />
             </div>
             <div>
-              <h3 style={{ fontSize: '1.15rem', color: '#fff' }}>Give Peer Kudos</h3>
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+              <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)' }}>Give Peer Kudos</h3>
+              <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                 Recognize a teammate and award monthly allowance points
               </p>
             </div>
@@ -156,24 +161,24 @@ export const GiveKudosModal = ({ isOpen, onClose, onKudosCreated }) => {
         <form onSubmit={handleSubmit} className="coss-dialog-body">
           {/* Allowance Health Indicator */}
           <div style={{
-            background: hasInsufficientFunds ? 'rgba(239, 68, 68, 0.1)' : 'rgba(99, 102, 241, 0.08)',
-            border: `1px solid ${hasInsufficientFunds ? 'rgba(239, 68, 68, 0.3)' : 'var(--border-subtle)'}`,
+            background: hasInsufficientFunds ? 'rgba(244, 63, 94, 0.12)' : 'rgba(99, 102, 241, 0.1)',
+            border: `1px solid ${hasInsufficientFunds ? 'rgba(244, 63, 94, 0.35)' : 'var(--border-accent)'}`,
             borderRadius: 'var(--radius-md)',
-            padding: '0.75rem 1rem',
-            marginBottom: '1.25rem',
+            padding: '0.85rem 1.15rem',
+            marginBottom: '1.35rem',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <ShieldCheck size={16} color={hasInsufficientFunds ? 'var(--accent-danger)' : 'var(--accent-primary)'} />
-              <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
+              <ShieldCheck size={18} color={hasInsufficientFunds ? 'var(--accent-danger)' : 'var(--accent-primary)'} />
+              <span style={{ fontSize: '0.84rem', color: 'var(--text-secondary)' }}>
                 Your Giving Allowance:
               </span>
             </div>
             <span style={{
-              fontSize: '0.9rem',
-              fontWeight: 700,
+              fontSize: '0.95rem',
+              fontWeight: 800,
               color: hasInsufficientFunds ? 'var(--accent-danger)' : 'var(--accent-success)'
             }}>
               {currentAllowance} pts remaining
@@ -184,7 +189,7 @@ export const GiveKudosModal = ({ isOpen, onClose, onKudosCreated }) => {
           <div className="coss-form-group" style={{ position: 'relative' }}>
             <label className="coss-label">
               <span>Select Recipient *</span>
-              <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Self-gifting prohibited</span>
+              <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Anti-fraud: No self-gifting</span>
             </label>
 
             {selectedUser ? (
@@ -195,19 +200,20 @@ export const GiveKudosModal = ({ isOpen, onClose, onKudosCreated }) => {
                 background: 'var(--bg-surface-elevated)',
                 border: '1px solid var(--border-medium)',
                 borderRadius: 'var(--radius-md)',
-                padding: '0.5rem 0.85rem'
+                padding: '0.65rem 1rem'
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                   <img
                     src={selectedUser.avatar}
                     alt={selectedUser.name}
                     className="coss-avatar coss-avatar-sm"
+                    style={{ border: '2px solid var(--accent-primary)' }}
                   />
                   <div>
-                    <div style={{ fontWeight: 600, fontSize: '0.875rem', color: '#fff' }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-primary)' }}>
                       {selectedUser.name}
                     </div>
-                    <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                       {selectedUser.department} • {selectedUser.email}
                     </div>
                   </div>
@@ -215,7 +221,7 @@ export const GiveKudosModal = ({ isOpen, onClose, onKudosCreated }) => {
 
                 <button
                   type="button"
-                  onClick={() => setSelectedUser(null)}
+                  onClick={() => { soundEffects.playPop(); setSelectedUser(null); }}
                   className="coss-btn coss-btn-ghost coss-btn-sm"
                 >
                   Change
@@ -235,7 +241,7 @@ export const GiveKudosModal = ({ isOpen, onClose, onKudosCreated }) => {
                     }}
                     onFocus={() => setUserDropdownOpen(true)}
                   />
-                  <Search size={16} color="var(--text-muted)" style={{ position: 'absolute', right: 12, top: 12 }} />
+                  <Search size={17} color="var(--text-muted)" style={{ position: 'absolute', right: 14, top: 14 }} />
                 </div>
 
                 {userDropdownOpen && (
@@ -244,17 +250,17 @@ export const GiveKudosModal = ({ isOpen, onClose, onKudosCreated }) => {
                     left: 0,
                     right: 0,
                     top: 'calc(100% + 4px)',
-                    maxHeight: 200,
+                    maxHeight: 220,
                     overflowY: 'auto',
-                    background: '#111827',
+                    background: 'var(--bg-surface)',
                     border: '1px solid var(--border-medium)',
                     borderRadius: 'var(--radius-md)',
                     boxShadow: 'var(--shadow-lg)',
                     zIndex: 20,
-                    padding: '0.25rem'
+                    padding: '0.35rem'
                   }}>
                     {filteredUsers.length === 0 ? (
-                      <div style={{ padding: '0.75rem', fontSize: '0.8125rem', color: 'var(--text-muted)', textAlign: 'center' }}>
+                      <div style={{ padding: '0.85rem', fontSize: '0.8125rem', color: 'var(--text-muted)', textAlign: 'center' }}>
                         No teammates found matching query.
                       </div>
                     ) : (
@@ -262,6 +268,7 @@ export const GiveKudosModal = ({ isOpen, onClose, onKudosCreated }) => {
                         <div
                           key={peer._id}
                           onClick={() => {
+                            soundEffects.playPop();
                             setSelectedUser(peer);
                             setUserDropdownOpen(false);
                             setSearchQuery('');
@@ -269,8 +276,8 @@ export const GiveKudosModal = ({ isOpen, onClose, onKudosCreated }) => {
                           style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.65rem',
-                            padding: '0.5rem 0.75rem',
+                            gap: '0.75rem',
+                            padding: '0.6rem 0.85rem',
                             borderRadius: 'var(--radius-sm)',
                             cursor: 'pointer',
                             transition: 'background var(--transition-fast)'
@@ -284,12 +291,12 @@ export const GiveKudosModal = ({ isOpen, onClose, onKudosCreated }) => {
                             className="coss-avatar coss-avatar-sm"
                           />
                           <div style={{ flex: 1 }}>
-                            <div style={{ fontSize: '0.84rem', fontWeight: 600, color: '#fff' }}>{peer.name}</div>
+                            <div style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--text-primary)' }}>{peer.name}</div>
                             <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
                               {peer.department}
                             </div>
                           </div>
-                          <span className="coss-badge coss-badge-indigo" style={{ fontSize: '0.7rem' }}>
+                          <span className="points-chip" style={{ fontSize: '0.7rem' }}>
                             {peer.earnedPoints} pts
                           </span>
                         </div>
@@ -305,9 +312,9 @@ export const GiveKudosModal = ({ isOpen, onClose, onKudosCreated }) => {
           <div className="coss-form-group">
             <label className="coss-label">
               <span>Points Amount *</span>
-              <span>Available: {currentAllowance} pts</span>
+              <span>Balance: {currentAllowance} pts</span>
             </label>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr) 110px', gap: '0.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr) 120px', gap: '0.6rem' }}>
               {POINT_OPTIONS.map((val) => {
                 const isSelected = !customPoints && points === val;
                 const isExceeded = val > currentAllowance;
@@ -317,13 +324,16 @@ export const GiveKudosModal = ({ isOpen, onClose, onKudosCreated }) => {
                     key={val}
                     disabled={isExceeded}
                     onClick={() => {
+                      soundEffects.playPop();
                       setPoints(val);
                       setCustomPoints('');
                     }}
                     className={`coss-btn ${isSelected ? 'coss-btn-primary' : 'coss-btn-secondary'}`}
                     style={{
-                      padding: '0.55rem',
-                      opacity: isExceeded ? 0.35 : 1
+                      padding: '0.65rem',
+                      fontWeight: 800,
+                      opacity: isExceeded ? 0.35 : 1,
+                      transform: isSelected ? 'scale(1.04)' : 'scale(1)'
                     }}
                   >
                     +{val} pts
@@ -339,12 +349,12 @@ export const GiveKudosModal = ({ isOpen, onClose, onKudosCreated }) => {
                 value={customPoints}
                 onChange={(e) => setCustomPoints(e.target.value)}
                 className="coss-input"
-                style={{ textAlign: 'center', padding: '0.45rem' }}
+                style={{ textAlign: 'center', padding: '0.55rem', fontWeight: 700 }}
               />
             </div>
             {hasInsufficientFunds && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--accent-danger)', fontSize: '0.75rem', marginTop: '0.35rem' }}>
-                <AlertTriangle size={13} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--accent-danger)', fontSize: '0.78rem', marginTop: '0.35rem' }}>
+                <AlertTriangle size={14} />
                 Selected points exceed your current allowance ({currentAllowance} pts).
               </div>
             )}
@@ -353,22 +363,26 @@ export const GiveKudosModal = ({ isOpen, onClose, onKudosCreated }) => {
           {/* Company Value Tag Picker */}
           <div className="coss-form-group">
             <label className="coss-label">Company Value Tag *</label>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
               {COMPANY_VALUES.map((cv) => {
                 const isSelected = companyValue === cv.tag;
                 return (
                   <button
                     type="button"
                     key={cv.tag}
-                    onClick={() => setCompanyValue(cv.tag)}
+                    onClick={() => {
+                      soundEffects.playPop();
+                      setCompanyValue(cv.tag);
+                    }}
                     className={`coss-badge ${isSelected ? 'coss-badge-indigo' : 'coss-badge-outline'}`}
                     style={{
-                      padding: '0.45rem 0.85rem',
-                      fontSize: '0.8125rem',
+                      padding: '0.5rem 0.95rem',
+                      fontSize: '0.84rem',
                       cursor: 'pointer',
-                      border: isSelected ? '1px solid var(--accent-primary)' : '1px solid var(--border-subtle)',
-                      background: isSelected ? 'rgba(99, 102, 241, 0.25)' : 'rgba(255, 255, 255, 0.03)',
-                      color: isSelected ? '#fff' : 'var(--text-secondary)'
+                      border: isSelected ? '1px solid var(--accent-primary)' : '1px solid var(--border-medium)',
+                      background: isSelected ? 'rgba(99, 102, 241, 0.3)' : 'transparent',
+                      color: isSelected ? '#fff' : 'var(--text-secondary)',
+                      boxShadow: isSelected ? '0 0 14px rgba(99, 102, 241, 0.4)' : 'none'
                     }}
                     title={cv.description}
                   >
@@ -398,7 +412,7 @@ export const GiveKudosModal = ({ isOpen, onClose, onKudosCreated }) => {
           </div>
 
           {/* Footer Actions */}
-          <div className="coss-dialog-footer" style={{ padding: '1rem 0 0 0', marginTop: '1rem' }}>
+          <div className="coss-dialog-footer" style={{ padding: '1.15rem 0 0 0', marginTop: '1.25rem' }}>
             <button
               type="button"
               onClick={onClose}
@@ -410,9 +424,10 @@ export const GiveKudosModal = ({ isOpen, onClose, onKudosCreated }) => {
             <button
               type="submit"
               disabled={submitting || hasInsufficientFunds || !selectedUser || !message.trim()}
-              className="coss-btn coss-btn-primary"
+              className="coss-btn coss-btn-primary coss-btn-lg"
+              style={{ fontWeight: 800 }}
             >
-              <Send size={16} />
+              <Send size={17} />
               {submitting ? 'Sending Kudos...' : `Send +${effectivePoints} Kudos`}
             </button>
           </div>
