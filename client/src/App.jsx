@@ -6,6 +6,7 @@ import { SocialFeed } from './components/feed/SocialFeed';
 import { LeaderboardView } from './components/leaderboard/LeaderboardView';
 import { AnalyticsView } from './components/analytics/AnalyticsView';
 import { ProfileView } from './components/profile/ProfileView';
+import { SidebarWidgets } from './components/layout/SidebarWidgets';
 import { GiveKudosModal } from './components/feed/GiveKudosModal';
 import { AuthModal } from './components/auth/AuthModal';
 import { SimulatedInboxModal } from './components/simulated/SimulatedInboxModal';
@@ -52,13 +53,32 @@ const AppContent = () => {
       />
 
       {/* Main Content Area */}
-      <main className="app-container" style={{ flex: 1, paddingTop: '1.75rem', paddingBottom: '3rem' }}>
+      <main className="app-container" style={{ flex: 1, paddingTop: '1.75rem', paddingBottom: '3.5rem' }}>
         {activeTab === 'feed' && (
-          <SocialFeed
-            onOpenGiveKudos={handleOpenGiveKudos}
-            onUserClick={handleUserClick}
-            newKudosItem={newlyCreatedKudos}
-          />
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 340px',
+            gap: '1.75rem',
+            alignItems: 'start'
+          }}>
+            {/* Center Feed Stream */}
+            <div>
+              <SocialFeed
+                onOpenGiveKudos={handleOpenGiveKudos}
+                onUserClick={handleUserClick}
+                newKudosItem={newlyCreatedKudos}
+              />
+            </div>
+
+            {/* Right Sticky Sidebar */}
+            <div style={{ position: 'sticky', top: '80px' }}>
+              <SidebarWidgets
+                onOpenGiveKudos={handleOpenGiveKudos}
+                onUserClick={handleUserClick}
+                setActiveTab={setActiveTab}
+              />
+            </div>
+          </div>
         )}
 
         {activeTab === 'leaderboard' && (
@@ -84,18 +104,20 @@ const AppContent = () => {
       {/* Footer */}
       <footer style={{
         borderTop: '1px solid var(--border-subtle)',
-        background: 'rgba(15, 23, 42, 0.6)',
-        padding: '1.5rem 0',
+        background: 'var(--bg-glass)',
+        backdropFilter: 'blur(16px)',
+        padding: '1.75rem 0',
         textAlign: 'center',
-        fontSize: '0.78rem',
+        fontSize: '0.8125rem',
         color: 'var(--text-muted)'
       }}>
-        <div className="app-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
-          <div>
-            <strong>KudosWall</strong> • Peer Recognition & Internal Feedback Platform (Bonusly / Matter Alternative)
+        <div className="app-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <span style={{ fontWeight: 800, color: 'var(--text-primary)' }}>KudosWall</span>
+            <span>• Peer Recognition & Internal Feedback Platform (Bonusly / Matter Alternative)</span>
           </div>
-          <div>
-            Pair-Token Auth (15m/7d Cookies) • Atomic Points Transfers • Coss UI System
+          <div style={{ fontSize: '0.75rem' }}>
+            Pair-Token Auth (15m/7d Cookies) • Atomic Points Transfer • Coss UI Standard
           </div>
         </div>
       </footer>
