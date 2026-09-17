@@ -4,9 +4,9 @@ import {
   Sparkles, 
   Filter, 
   TrendingUp, 
-  Users,
-  Award,
-  Crown
+  Users, 
+  Award, 
+  Crown 
 } from 'lucide-react';
 import { analyticsService } from '../../services/api';
 import { soundEffects } from '../../utils/effects';
@@ -46,7 +46,7 @@ export const LeaderboardView = ({ onUserClick }) => {
   const remaining = leaderboard.slice(3);
 
   return (
-    <div style={{ maxWidth: 900, margin: '0 auto' }}>
+    <div style={{ maxWidth: 1060, margin: '0 auto', width: '100%' }}>
       {/* Header Banner */}
       <div className="coss-card coss-card-glow" style={{
         marginBottom: '1.5rem',
@@ -54,7 +54,9 @@ export const LeaderboardView = ({ onUserClick }) => {
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '1.65rem 2rem',
-        borderRadius: 'var(--radius-lg)'
+        borderRadius: 'var(--radius-lg)',
+        flexWrap: 'wrap',
+        gap: '1rem'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
           <div style={{
@@ -98,7 +100,7 @@ export const LeaderboardView = ({ onUserClick }) => {
 
       {/* Department Filter Pills */}
       <div className="coss-card" style={{ padding: '0.95rem 1.4rem', marginBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', overflowX: 'auto' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', overflowX: 'auto', paddingBottom: '0.2rem' }}>
           <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.35rem', flexShrink: 0 }}>
             <Filter size={14} color="var(--accent-primary)" /> Department:
           </span>
@@ -142,14 +144,15 @@ export const LeaderboardView = ({ onUserClick }) => {
             display: 'flex',
             alignItems: 'flex-end',
             justifyContent: 'center',
-            gap: '1.75rem',
-            paddingBottom: '1rem'
+            gap: '2rem',
+            paddingBottom: '1rem',
+            flexWrap: 'wrap'
           }}>
             {/* 2nd Place (Left) */}
             {top3[1] && (
               <div 
                 onClick={() => { soundEffects.playPop(); onUserClick && onUserClick(top3[1].userId); }}
-                style={{ textAlign: 'center', cursor: 'pointer', width: 190 }}
+                style={{ textAlign: 'center', cursor: 'pointer', width: 200 }}
               >
                 <div style={{ position: 'relative', display: 'inline-block', marginBottom: '0.5rem' }}>
                   <img
@@ -188,7 +191,7 @@ export const LeaderboardView = ({ onUserClick }) => {
             {top3[0] && (
               <div 
                 onClick={() => { soundEffects.playPop(); onUserClick && onUserClick(top3[0].userId); }}
-                style={{ textAlign: 'center', cursor: 'pointer', width: 220 }}
+                style={{ textAlign: 'center', cursor: 'pointer', width: 230 }}
               >
                 <div style={{ position: 'relative', display: 'inline-block', marginBottom: '0.5rem' }}>
                   <div style={{
@@ -238,7 +241,7 @@ export const LeaderboardView = ({ onUserClick }) => {
             {top3[2] && (
               <div 
                 onClick={() => { soundEffects.playPop(); onUserClick && onUserClick(top3[2].userId); }}
-                style={{ textAlign: 'center', cursor: 'pointer', width: 190 }}
+                style={{ textAlign: 'center', cursor: 'pointer', width: 200 }}
               >
                 <div style={{ position: 'relative', display: 'inline-block', marginBottom: '0.5rem' }}>
                   <img
@@ -276,82 +279,84 @@ export const LeaderboardView = ({ onUserClick }) => {
         </div>
       )}
 
-      {/* Leaderboard Table */}
+      {/* Leaderboard Table with Responsive Overflow Protection */}
       <div className="coss-card" style={{ padding: 0, overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-          <thead>
-            <tr style={{ background: 'var(--bg-surface-elevated)', borderBottom: '1px solid var(--border-subtle)' }}>
-              <th style={{ padding: '0.95rem 1.4rem', fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>Rank</th>
-              <th style={{ padding: '0.95rem 1.4rem', fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>Teammate</th>
-              <th style={{ padding: '0.95rem 1.4rem', fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>Department</th>
-              <th style={{ padding: '0.95rem 1.4rem', fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>Recognitions</th>
-              <th style={{ padding: '0.95rem 1.4rem', fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>Top Values</th>
-              <th style={{ padding: '0.95rem 1.4rem', fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', textAlign: 'right' }}>Total Points</th>
-            </tr>
-          </thead>
-          <tbody>
-            {leaderboard.length === 0 ? (
-              <tr>
-                <td colSpan={6} style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-                  No recognition activity recorded for this period yet.
-                </td>
+        <div style={{ width: '100%', overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: 740 }}>
+            <thead>
+              <tr style={{ background: 'var(--bg-surface-elevated)', borderBottom: '1px solid var(--border-subtle)' }}>
+                <th style={{ padding: '0.95rem 1.15rem', fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', width: '70px' }}>Rank</th>
+                <th style={{ padding: '0.95rem 1.15rem', fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', minWidth: '190px' }}>Teammate</th>
+                <th style={{ padding: '0.95rem 1.15rem', fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', width: '130px' }}>Department</th>
+                <th style={{ padding: '0.95rem 1.15rem', fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', width: '120px' }}>Recognitions</th>
+                <th style={{ padding: '0.95rem 1.15rem', fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', minWidth: '180px' }}>Top Values</th>
+                <th style={{ padding: '0.95rem 1.75rem 0.95rem 1.15rem', fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', textAlign: 'right', width: '140px' }}>Total Points</th>
               </tr>
-            ) : (
-              leaderboard.map((row) => (
-                <tr
-                  key={row.userId}
-                  onClick={() => { soundEffects.playPop(); onUserClick && onUserClick(row.userId); }}
-                  style={{
-                    borderBottom: '1px solid var(--border-subtle)',
-                    cursor: 'pointer',
-                    transition: 'background var(--transition-fast)'
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-surface-hover)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                >
-                  <td style={{ padding: '1rem 1.4rem', fontWeight: 900 }}>
-                    {row.rank === 1 ? '🥇 1' : row.rank === 2 ? '🥈 2' : row.rank === 3 ? '🥉 3' : `#${row.rank}`}
-                  </td>
-                  <td style={{ padding: '1rem 1.4rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                      <img
-                        src={row.avatar}
-                        alt={row.name}
-                        className="coss-avatar coss-avatar-sm"
-                      />
-                      <div>
-                        <div style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.9rem' }}>{row.name}</div>
-                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{row.email}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td style={{ padding: '1rem 1.4rem' }}>
-                    <span className="coss-badge coss-badge-violet" style={{ fontSize: '0.75rem' }}>
-                      {row.department}
-                    </span>
-                  </td>
-                  <td style={{ padding: '1rem 1.4rem', fontSize: '0.84rem', color: 'var(--text-secondary)' }}>
-                    <strong>{row.kudosCount}</strong> received
-                  </td>
-                  <td style={{ padding: '1rem 1.4rem' }}>
-                    <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap' }}>
-                      {row.valuesReceived?.slice(0, 2).map((val) => (
-                        <span key={val} className="coss-badge coss-badge-indigo" style={{ fontSize: '0.7rem', padding: '0.18rem 0.5rem' }}>
-                          {val}
-                        </span>
-                      ))}
-                    </div>
-                  </td>
-                  <td style={{ padding: '1rem 1.4rem', textAlign: 'right' }}>
-                    <span className="points-chip" style={{ fontSize: '0.85rem' }}>
-                      +{row.totalPoints} pts
-                    </span>
+            </thead>
+            <tbody>
+              {leaderboard.length === 0 ? (
+                <tr>
+                  <td colSpan={6} style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+                    No recognition activity recorded for this period yet.
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                leaderboard.map((row) => (
+                  <tr
+                    key={row.userId}
+                    onClick={() => { soundEffects.playPop(); onUserClick && onUserClick(row.userId); }}
+                    style={{
+                      borderBottom: '1px solid var(--border-subtle)',
+                      cursor: 'pointer',
+                      transition: 'background var(--transition-fast)'
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-surface-hover)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                  >
+                    <td style={{ padding: '0.95rem 1.15rem', fontWeight: 900 }}>
+                      {row.rank === 1 ? '🥇 1' : row.rank === 2 ? '🥈 2' : row.rank === 3 ? '🥉 3' : `#${row.rank}`}
+                    </td>
+                    <td style={{ padding: '0.95rem 1.15rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <img
+                          src={row.avatar}
+                          alt={row.name}
+                          className="coss-avatar coss-avatar-sm"
+                        />
+                        <div>
+                          <div style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.9rem' }}>{row.name}</div>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{row.email}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td style={{ padding: '0.95rem 1.15rem' }}>
+                      <span className="coss-badge coss-badge-violet" style={{ fontSize: '0.75rem' }}>
+                        {row.department}
+                      </span>
+                    </td>
+                    <td style={{ padding: '0.95rem 1.15rem', fontSize: '0.84rem', color: 'var(--text-secondary)' }}>
+                      <strong>{row.kudosCount}</strong> received
+                    </td>
+                    <td style={{ padding: '0.95rem 1.15rem' }}>
+                      <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap' }}>
+                        {row.valuesReceived?.slice(0, 2).map((val) => (
+                          <span key={val} className="coss-badge coss-badge-indigo" style={{ fontSize: '0.7rem', padding: '0.18rem 0.5rem' }}>
+                            {val}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
+                    <td style={{ padding: '0.95rem 1.75rem 0.95rem 1.15rem', textAlign: 'right' }}>
+                      <span className="points-chip" style={{ fontSize: '0.85rem' }}>
+                        +{row.totalPoints} pts
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
