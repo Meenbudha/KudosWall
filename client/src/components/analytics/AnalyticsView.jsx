@@ -5,10 +5,7 @@ import {
   Sparkles, 
   Users, 
   Award, 
-  Layers, 
-  RotateCcw,
-  CheckCircle2,
-  TrendingUp
+  RotateCcw
 } from 'lucide-react';
 import { analyticsService } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
@@ -69,35 +66,36 @@ export const AnalyticsView = () => {
   }
 
   return (
-    <div style={{ maxWidth: 900, margin: '0 auto' }}>
+    <div style={{ maxWidth: 960, margin: '0 auto', width: '100%' }}>
       {/* Top Header */}
-      <div className="coss-card" style={{
+      <div className="coss-card coss-card-glow" style={{
         marginBottom: '1.5rem',
-        background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%)',
-        border: '1px solid var(--border-medium)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '1.5rem 2rem'
+        padding: '1.65rem 2rem',
+        borderRadius: 'var(--radius-lg)',
+        flexWrap: 'wrap',
+        gap: '1rem'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
           <div style={{
-            width: 50,
-            height: 50,
-            borderRadius: 'var(--radius-lg)',
-            background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+            width: 52,
+            height: 52,
+            borderRadius: 'var(--radius-md)',
+            background: 'var(--gradient-primary)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 4px 16px rgba(99, 102, 241, 0.4)'
+            boxShadow: '0 6px 20px rgba(99, 102, 241, 0.4)'
           }}>
             <BarChart3 size={26} color="#fff" />
           </div>
           <div>
-            <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#fff' }}>
+            <h2 style={{ fontSize: '1.45rem', fontWeight: 800, color: 'var(--text-primary)' }}>
               Organizational Culture Analytics
             </h2>
-            <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)' }}>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>
               Data insights on company values distribution and peer engagement
             </p>
           </div>
@@ -115,71 +113,75 @@ export const AnalyticsView = () => {
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-        gap: '1rem',
+        gap: '1.25rem',
         marginBottom: '1.5rem'
       }}>
         <div className="coss-card">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>Total Kudos Shared</span>
+            <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Total Kudos Shared</span>
             <Award size={18} color="var(--accent-primary)" />
           </div>
-          <div style={{ fontSize: '2rem', fontWeight: 800, color: '#fff', marginTop: '0.5rem' }}>
+          <div style={{ fontSize: '2.25rem', fontWeight: 900, color: 'var(--text-primary)', marginTop: '0.5rem' }}>
             {summary?.totalKudos || 0}
           </div>
-          <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Peer recognitions across company</span>
+          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Peer recognitions across company</span>
         </div>
 
         <div className="coss-card">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>Points Transferred</span>
+            <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Points Transferred</span>
             <Sparkles size={18} color="var(--accent-success)" />
           </div>
-          <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--accent-success)', marginTop: '0.5rem' }}>
+          <div style={{ fontSize: '2.25rem', fontWeight: 900, color: 'var(--accent-success)', marginTop: '0.5rem' }}>
             {summary?.totalPointsGiven || 0} pts
           </div>
-          <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Celebrated through peer wallets</span>
+          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Celebrated through peer wallets</span>
         </div>
 
         <div className="coss-card">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>Active Team Members</span>
+            <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Active Team Members</span>
             <Users size={18} color="var(--accent-secondary)" />
           </div>
-          <div style={{ fontSize: '2rem', fontWeight: 800, color: '#fff', marginTop: '0.5rem' }}>
+          <div style={{ fontSize: '2.25rem', fontWeight: 900, color: 'var(--text-primary)', marginTop: '0.5rem' }}>
             {summary?.totalUsers || 0}
           </div>
-          <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Across 6 core departments</span>
+          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Across 6 core departments</span>
         </div>
       </div>
 
       {/* Company Values Distribution */}
       <div className="coss-card" style={{ marginBottom: '1.5rem' }}>
-        <h3 style={{ fontSize: '1.1rem', marginBottom: '0.4rem' }}>Core Values Distribution</h3>
-        <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
+        <h3 style={{ fontSize: '1.15rem', marginBottom: '0.35rem', color: 'var(--text-primary)' }}>Core Values Distribution</h3>
+        <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '1.35rem' }}>
           Which company values team members are celebrating most frequently
         </p>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.15rem' }}>
           {(summary?.companyValues || []).map((cv) => {
             const percentage = summary?.totalKudos ? Math.round((cv.count / summary.totalKudos) * 100) : 0;
             return (
               <div key={cv._id}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.84rem', marginBottom: '0.35rem' }}>
-                  <span style={{ fontWeight: 600, color: '#fff' }}>{cv._id}</span>
-                  <span style={{ color: 'var(--text-muted)' }}>{cv.count} kudos ({cv.totalPoints} pts) • {percentage}%</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.86rem', marginBottom: '0.4rem' }}>
+                  <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{cv._id}</span>
+                  <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+                    {cv.count} kudos ({cv.totalPoints} pts) • <strong>{percentage}%</strong>
+                  </span>
                 </div>
                 <div style={{
-                  height: 8,
+                  height: 9,
                   width: '100%',
-                  background: 'rgba(255, 255, 255, 0.05)',
+                  background: 'var(--bg-surface-elevated)',
+                  border: '1px solid var(--border-subtle)',
                   borderRadius: 'var(--radius-full)',
                   overflow: 'hidden'
                 }}>
                   <div style={{
                     height: '100%',
                     width: `${percentage}%`,
-                    background: 'linear-gradient(90deg, var(--accent-primary), var(--accent-secondary))',
-                    borderRadius: 'var(--radius-full)'
+                    background: 'var(--gradient-primary)',
+                    borderRadius: 'var(--radius-full)',
+                    transition: 'width 0.5s ease'
                   }} />
                 </div>
               </div>
@@ -190,29 +192,29 @@ export const AnalyticsView = () => {
 
       {/* Department Breakdown */}
       <div className="coss-card" style={{ marginBottom: '1.5rem' }}>
-        <h3 style={{ fontSize: '1.1rem', marginBottom: '0.4rem' }}>Department Points Summary</h3>
-        <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
+        <h3 style={{ fontSize: '1.15rem', marginBottom: '0.35rem', color: 'var(--text-primary)' }}>Department Points Summary</h3>
+        <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '1.35rem' }}>
           Recognition points accumulated by each department
         </p>
 
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '0.75rem'
+          gap: '1rem'
         }}>
           {(summary?.departmentBreakdown || []).map((d) => (
             <div
               key={d._id}
               style={{
-                background: 'rgba(255, 255, 255, 0.02)',
+                background: 'var(--bg-surface-elevated)',
                 border: '1px solid var(--border-subtle)',
                 borderRadius: 'var(--radius-md)',
-                padding: '1rem'
+                padding: '1.15rem'
               }}
             >
-              <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#fff' }}>{d._id}</div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{d.memberCount} members</div>
-              <div className="coss-badge coss-badge-emerald" style={{ marginTop: '0.5rem' }}>
+              <div style={{ fontWeight: 800, fontSize: '0.95rem', color: 'var(--text-primary)' }}>{d._id}</div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>{d.memberCount} members</div>
+              <div className="points-chip" style={{ marginTop: '0.65rem', fontSize: '0.78rem' }}>
                 +{d.totalEarnedPoints} pts earned
               </div>
             </div>
@@ -222,16 +224,16 @@ export const AnalyticsView = () => {
 
       {/* Monthly Allowance Reset Simulator */}
       <div className="coss-card" style={{
-        border: '1px solid rgba(245, 158, 11, 0.3)',
-        background: 'rgba(245, 158, 11, 0.03)'
+        border: '1px solid rgba(245, 158, 11, 0.35)',
+        background: 'rgba(245, 158, 11, 0.05)'
       }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <RotateCcw size={18} color="var(--accent-warning)" />
-              <h3 style={{ fontSize: '1.1rem', color: '#fff' }}>Monthly Allowance Reset Engine</h3>
+              <h3 style={{ fontSize: '1.15rem', color: 'var(--text-primary)' }}>Monthly Allowance Reset Engine</h3>
             </div>
-            <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', maxWidth: 540, marginTop: '0.4rem' }}>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', maxWidth: 560, marginTop: '0.4rem', lineHeight: 1.5 }}>
               According to specification requirements, each month all employee recognition wallets have their 
               <code>givingAllowance</code> refreshed back to <strong>100 points</strong>.
               In production, this executes as a scheduled cron job. You can simulate the trigger here on demand.
@@ -242,7 +244,7 @@ export const AnalyticsView = () => {
             onClick={handleResetAllowance}
             disabled={resetting || !user}
             className="coss-btn coss-btn-primary"
-            style={{ background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' }}
+            style={{ background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', fontWeight: 700 }}
           >
             <RotateCcw size={16} />
             {resetting ? 'Resetting...' : 'Simulate Monthly Reset (100 pts)'}

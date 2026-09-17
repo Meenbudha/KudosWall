@@ -50,7 +50,7 @@ export const SimulatedInboxModal = ({ isOpen, onClose }) => {
               <Mail size={16} color="var(--accent-primary)" />
             </div>
             <div>
-              <h3 style={{ fontSize: '1.15rem', color: '#fff' }}>Simulated Email Inbox</h3>
+              <h3 style={{ fontSize: '1.15rem', color: 'var(--text-primary)' }}>Simulated Email Inbox</h3>
               <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                 Inspect outgoing simulated verification emails & password reset tokens
               </p>
@@ -81,7 +81,7 @@ export const SimulatedInboxModal = ({ isOpen, onClose }) => {
           ) : emails.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
               <Mail size={32} color="var(--text-muted)" style={{ margin: '0 auto 0.75rem' }} />
-              <p style={{ color: '#fff', fontWeight: 600 }}>Simulated Inbox is Empty</p>
+              <p style={{ color: 'var(--text-primary)', fontWeight: 600 }}>Simulated Inbox is Empty</p>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.8125rem', marginTop: '0.25rem' }}>
                 When you sign up a new user or request a password reset, simulated emails will appear here automatically.
               </p>
@@ -103,7 +103,7 @@ export const SimulatedInboxModal = ({ isOpen, onClose }) => {
                       <span className={`coss-badge ${mail.type === 'VERIFICATION' ? 'coss-badge-emerald' : 'coss-badge-amber'}`} style={{ marginBottom: '0.35rem' }}>
                         {mail.type}
                       </span>
-                      <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#fff' }}>
+                      <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-primary)' }}>
                         {mail.subject}
                       </div>
                       <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>

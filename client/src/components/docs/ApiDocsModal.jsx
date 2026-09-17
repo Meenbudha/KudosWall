@@ -35,7 +35,7 @@ export const ApiDocsModal = ({ isOpen, onClose }) => {
               <BookOpen size={16} color="var(--accent-primary)" />
             </div>
             <div>
-              <h3 style={{ fontSize: '1.15rem', color: '#fff' }}>KudosWall REST API Documentation</h3>
+              <h3 style={{ fontSize: '1.15rem', color: 'var(--text-primary)' }}>KudosWall REST API Documentation</h3>
               <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                 Pair token JWT authentication, atomic point transactions & MongoDB aggregations
               </p>
@@ -70,7 +70,7 @@ export const ApiDocsModal = ({ isOpen, onClose }) => {
           {/* Endpoints List */}
           {docs?.endpoints?.map((cat) => (
             <div key={cat.category} style={{ marginBottom: '1.5rem' }}>
-              <h4 style={{ fontSize: '0.95rem', color: '#fff', marginBottom: '0.75rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.35rem' }}>
+              <h4 style={{ fontSize: '0.95rem', color: 'var(--text-primary)', marginBottom: '0.75rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.35rem' }}>
                 {cat.category}
               </h4>
 
@@ -90,7 +90,7 @@ export const ApiDocsModal = ({ isOpen, onClose }) => {
                         <span className={`coss-badge ${item.method === 'GET' ? 'coss-badge-emerald' : item.method === 'POST' ? 'coss-badge-indigo' : 'coss-badge-amber'}`}>
                           {item.method}
                         </span>
-                        <code style={{ fontSize: '0.8125rem', color: '#fff', fontWeight: 600 }}>
+                        <code style={{ fontSize: '0.8125rem', color: 'var(--text-primary)', fontWeight: 600 }}>
                           /api{item.path}
                         </code>
                       </div>

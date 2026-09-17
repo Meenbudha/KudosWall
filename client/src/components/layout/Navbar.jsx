@@ -13,18 +13,14 @@ import {
   BarChart3,
   ChevronDown,
   Sun,
-  Moon,
-  Volume2,
-  VolumeX
+  Moon
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { soundEffects } from '../../utils/effects';
 
 export const Navbar = ({ activeTab, setActiveTab, onOpenGiveKudos, onOpenInbox, onOpenDocs }) => {
   const { user, logout, openAuthModal } = useAuth();
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [theme, setTheme] = useState(localStorage.getItem('kudos_theme') || 'dark');
-  const [isMuted, setIsMuted] = useState(soundEffects.muted);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -34,13 +30,6 @@ export const Navbar = ({ activeTab, setActiveTab, onOpenGiveKudos, onOpenInbox, 
   const toggleTheme = () => {
     const nextTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(nextTheme);
-    soundEffects.playPop();
-  };
-
-  const toggleSound = () => {
-    const muted = soundEffects.toggleMute();
-    setIsMuted(muted);
-    if (!muted) soundEffects.playPop();
   };
 
   return (
@@ -62,7 +51,7 @@ export const Navbar = ({ activeTab, setActiveTab, onOpenGiveKudos, onOpenInbox, 
         {/* Brand Logo & Name */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
           <div 
-            onClick={() => { setActiveTab('feed'); soundEffects.playPop(); }}
+            onClick={() => setActiveTab('feed')}
             style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}
           >
             <div style={{
@@ -73,13 +62,13 @@ export const Navbar = ({ activeTab, setActiveTab, onOpenGiveKudos, onOpenInbox, 
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 4px 16px rgba(99, 102, 241, 0.45)'
+              boxShadow: '0 4px 16px rgba(99, 102, 241, 0.4)'
             }}>
-              <Award size={24} color="#fff" />
+              <Award size={24} color="#ffffff" />
             </div>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.35rem', fontWeight: 800, letterSpacing: '-0.03em' }}>
+                <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.35rem', fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--text-primary)' }}>
                   Kudos<span className="text-gradient">Wall</span>
                 </span>
                 <span className="coss-badge coss-badge-indigo" style={{ fontSize: '0.65rem', padding: '0.15rem 0.45rem' }}>PRO</span>
@@ -93,21 +82,21 @@ export const Navbar = ({ activeTab, setActiveTab, onOpenGiveKudos, onOpenInbox, 
           {/* Navigation Tabs */}
           <nav style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
             <button
-              onClick={() => { setActiveTab('feed'); soundEffects.playPop(); }}
+              onClick={() => setActiveTab('feed')}
               className={`coss-btn ${activeTab === 'feed' ? 'coss-btn-primary' : 'coss-btn-ghost'} coss-btn-sm`}
             >
               <LayoutGrid size={15} />
               Social Feed
             </button>
             <button
-              onClick={() => { setActiveTab('leaderboard'); soundEffects.playPop(); }}
+              onClick={() => setActiveTab('leaderboard')}
               className={`coss-btn ${activeTab === 'leaderboard' ? 'coss-btn-primary' : 'coss-btn-ghost'} coss-btn-sm`}
             >
               <TrendingUp size={15} />
               Leaderboard
             </button>
             <button
-              onClick={() => { setActiveTab('analytics'); soundEffects.playPop(); }}
+              onClick={() => setActiveTab('analytics')}
               className={`coss-btn ${activeTab === 'analytics' ? 'coss-btn-primary' : 'coss-btn-ghost'} coss-btn-sm`}
             >
               <BarChart3 size={15} />
@@ -123,24 +112,14 @@ export const Navbar = ({ activeTab, setActiveTab, onOpenGiveKudos, onOpenInbox, 
             onClick={toggleTheme}
             className="coss-btn coss-btn-ghost coss-btn-sm"
             style={{ padding: '0.45rem', borderRadius: 'var(--radius-full)' }}
-            title={`Switch to ${theme === 'dark' ? 'Daylight Light' : 'Aurora Dark'} mode`}
+            title={`Switch to ${theme === 'dark' ? 'Daylight Light' : 'Deep Dark'} mode`}
           >
-            {theme === 'dark' ? <Sun size={17} color="#fbbf24" /> : <Moon size={17} color="#6366f1" />}
-          </button>
-
-          {/* Audio Haptics Toggle */}
-          <button
-            onClick={toggleSound}
-            className="coss-btn coss-btn-ghost coss-btn-sm"
-            style={{ padding: '0.45rem', borderRadius: 'var(--radius-full)' }}
-            title={isMuted ? 'Unmute UI sounds' : 'Mute UI sounds'}
-          >
-            {isMuted ? <VolumeX size={17} color="var(--text-muted)" /> : <Volume2 size={17} color="var(--accent-primary)" />}
+            {theme === 'dark' ? <Sun size={18} color="#fbbf24" /> : <Moon size={18} color="#6366f1" />}
           </button>
 
           {/* Quick Evaluator Links */}
           <button 
-            onClick={() => { onOpenInbox(); soundEffects.playPop(); }}
+            onClick={onOpenInbox}
             className="coss-btn coss-btn-secondary coss-btn-sm" 
             title="Simulated Email Inbox"
           >
@@ -149,7 +128,7 @@ export const Navbar = ({ activeTab, setActiveTab, onOpenGiveKudos, onOpenInbox, 
           </button>
 
           <button 
-            onClick={() => { onOpenDocs(); soundEffects.playPop(); }}
+            onClick={onOpenDocs}
             className="coss-btn coss-btn-secondary coss-btn-sm" 
             title="Interactive API Documentation"
           >
@@ -173,7 +152,7 @@ export const Navbar = ({ activeTab, setActiveTab, onOpenGiveKudos, onOpenInbox, 
               <div 
                 className="points-chip"
                 style={{ cursor: 'pointer', fontSize: '0.8rem' }}
-                onClick={() => { setActiveTab('profile'); soundEffects.playPop(); }}
+                onClick={() => setActiveTab('profile')}
                 title="Your cumulative earned recognition points"
               >
                 <Sparkles size={14} />
@@ -182,7 +161,7 @@ export const Navbar = ({ activeTab, setActiveTab, onOpenGiveKudos, onOpenInbox, 
 
               {/* Give Kudos Action Button */}
               <button
-                onClick={() => { onOpenGiveKudos(); soundEffects.playPop(); }}
+                onClick={onOpenGiveKudos}
                 className="coss-btn coss-btn-primary"
                 style={{ borderRadius: 'var(--radius-full)', fontWeight: 700 }}
               >
@@ -237,7 +216,7 @@ export const Navbar = ({ activeTab, setActiveTab, onOpenGiveKudos, onOpenInbox, 
 
                     <div style={{ padding: '0.4rem 0' }}>
                       <button
-                        onClick={() => { setActiveTab('profile'); setUserDropdownOpen(false); soundEffects.playPop(); }}
+                        onClick={() => { setActiveTab('profile'); setUserDropdownOpen(false); }}
                         className="coss-btn coss-btn-ghost"
                         style={{ width: '100%', justifyContent: 'flex-start', fontSize: '0.8125rem' }}
                       >

@@ -114,7 +114,7 @@ export const AuthModal = () => {
             }}>
               <Lock size={16} color="var(--accent-primary)" />
             </div>
-            <h3 style={{ fontSize: '1.15rem', color: '#fff' }}>
+            <h3 style={{ fontSize: '1.15rem', color: 'var(--text-primary)' }}>
               {view === 'login' && 'Sign in to KudosWall'}
               {view === 'signup' && 'Create Teammate Account'}
               {view === 'verify' && 'Simulated Email Verification'}
